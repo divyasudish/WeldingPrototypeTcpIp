@@ -19,10 +19,12 @@ import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.taal.welding.R;
+import com.taal.welding.assistent.AndroidSharedPreferences;
 import com.taal.welding.database.DatabaseHelper;
 import com.taal.welding.model.DeviceClass;
 import com.taal.welding.model.GearBoxClass;
@@ -58,11 +60,18 @@ public class Motor_GairBoxActivity extends AppCompatActivity {
     private TextView conn;
     private DatabaseHelper databaseHelper;
     private List<GearBoxClass> mList;
+    private RelativeLayout rel;
+    private String ip;// = "192.168.0.22";
+    private int port;// = 20108;
+    private final String TCP_CLIENT_PORT = "tcp_client_port";
+    private final String TCP_CLIENT_IP = "tcp_client_ip";
+    private String mDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_motor__gair_box);
+        rel = (RelativeLayout) findViewById(R.id.relative);
         bId = (EditText) findViewById(R.id.bId);
         bOd = (EditText) findViewById(R.id.bOd);
         bMd = (EditText) findViewById(R.id.bMd);
@@ -80,8 +89,14 @@ public class Motor_GairBoxActivity extends AppCompatActivity {
         ipText = (TextView) findViewById(R.id.idTitle);
         databaseHelper = new DatabaseHelper(this);
         mList = databaseHelper.getAllGearBoxes();
+        try {
+            ip = AndroidSharedPreferences.getString(TCP_CLIENT_IP, "");
+            String portPre = AndroidSharedPreferences.getString(TCP_CLIENT_PORT,"-1");
+            port = Integer.parseInt(portPre);
+        }
+        catch (Exception e) {
 
-
+        }
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT))
@@ -110,24 +125,26 @@ public class Motor_GairBoxActivity extends AppCompatActivity {
 
 
         for (int i = 0; i < newList.size(); i++) {
-            if(!newList.get(0).getIp().trim().isEmpty()) {
-                device = newList.get(0).getIp() + "::" +newList.get(0).getDevice();
+            if(newList.get(i).getIp().trim().equals(ip) || newList.get(i).getIp().trim().equals("192.168.0.22")) {
+                device = newList.get(i).getIp() + "::" +newList.get(i).getDevice();
+                mDevice = newList.get(i).getDevice();
                 break;
             }
         }
 
         if(device != null){
             ipText.setText(device);
+            rel.setVisibility(View.VISIBLE);
         }
         else{
-            ipText.setText("192.168.0.101" + "::" + "crc_evans");
+            Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_LONG).show();
         }
         //confirm.setEnabled(false);
 
         try{
             if(!mList.isEmpty()) {
                 for(int i = 0; i < mList.size(); i++) {
-                    if(mList.get(i).getDeviceNmae().equals("crc_evans")) {
+                    if(mList.get(i).getDeviceNmae().equals(mDevice)) {
                         bId.setText(mList.get(i).getBandId());
                         bOd.setText(mList.get(i).getBandOd());
                         bMd.setText(mList.get(i).getBandMd());
@@ -152,7 +169,7 @@ public class Motor_GairBoxActivity extends AppCompatActivity {
                 if(!(ipText.getText().toString().trim().isEmpty()) && !(bId.getText().toString().trim().isEmpty()) && !(bOd.getText().toString().trim().isEmpty() && !(bMd.getText().toString().trim().isEmpty())
                 && !(pId.getText().toString().trim().isEmpty()) && !(pOd.getText().toString().trim().isEmpty()) && !(pMd.getText().toString().trim().isEmpty()) && !(gbrText.getText().toString().trim().isEmpty())
                 && !(bracketText.getText().toString().trim().isEmpty()) && !(gearText.getText().toString().isEmpty()))) {
-                    db.createGearBox(new GearBoxClass("crc_evans", bId.getText().toString().trim(), bOd.getText().toString().trim(), bMd.getText().toString().trim(), pId.getText().toString().trim(),pOd.getText().toString().trim(), pMd.getText().toString().trim(), gbrText.getText().toString().trim(), bracketText.getText().toString().trim(), gearText.getText().toString().trim()));
+                    db.createGearBox(new GearBoxClass(mDevice, bId.getText().toString().trim(), bOd.getText().toString().trim(), bMd.getText().toString().trim(), pId.getText().toString().trim(),pOd.getText().toString().trim(), pMd.getText().toString().trim(), gbrText.getText().toString().trim(), bracketText.getText().toString().trim(), gearText.getText().toString().trim()));
                     Toast.makeText(getApplicationContext(), "Successfully saved in database", Toast.LENGTH_SHORT).show();
                     //finish();
                 }

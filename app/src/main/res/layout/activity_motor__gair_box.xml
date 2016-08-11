@@ -41,11 +41,13 @@
         android:layout_toRightOf="@+id/idTitle"
         android:textStyle="normal"/>
     <RelativeLayout
+        android:id="@+id/relative"
         android:layout_width="300dp"
         android:layout_height="340dp"
         android:layout_below="@+id/idTitle"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
+        android:visibility="invisible"
         android:background="@drawable/edittext_border">
         <TableLayout
             android:id="@+id/table1"

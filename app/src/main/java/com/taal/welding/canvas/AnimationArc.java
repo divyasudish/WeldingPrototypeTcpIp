@@ -8,13 +8,13 @@ import android.view.animation.Transformation;
 
 public class AnimationArc extends Animation {
 
-    private Arc arc;
+    private ArrowView arc;
     private RelArc relArc;
     private float oldAngle;
     private float newAngle;
     private float arrowAngle;
     
-    public AnimationArc(Arc arc, float newAngle) {
+    public AnimationArc(ArrowView arc, float newAngle) {
         this.oldAngle = arc.getAngle();
         this.newAngle = newAngle;
         //this.arrowAngle = arrowAngle;

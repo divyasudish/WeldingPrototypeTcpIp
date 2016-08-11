@@ -170,7 +170,7 @@ public class MachineInfoActivity extends AppCompatActivity {
                 //newDeviceList.addAll(mList);
             }
             if(mList.isEmpty()){
-                Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_SHORT).show();
             }
         }
         catch (Exception e) {
@@ -186,8 +186,8 @@ public class MachineInfoActivity extends AppCompatActivity {
                 CheckBox chk = (CheckBox) v;
                 if(chk.isChecked()) {
                     checkBox1.setChecked(true);
-                    checkBox2.setChecked(true);
-                    checkBox3.setChecked(true);
+//                    checkBox2.setChecked(true);
+//                    checkBox3.setChecked(true);
                 } else {
                     checkBox1.setChecked(false);
                     checkBox2.setChecked(false);

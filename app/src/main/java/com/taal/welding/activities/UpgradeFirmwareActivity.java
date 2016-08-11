@@ -125,7 +125,7 @@ public class UpgradeFirmwareActivity extends AppCompatActivity {
                 //newDeviceList.addAll(mList);
             }
             if(mList.isEmpty()){
-                Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_SHORT).show();
             }
         }
         catch (Exception e) {

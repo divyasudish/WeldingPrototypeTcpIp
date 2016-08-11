@@ -18,7 +18,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.taal.welding.R;
-import com.taal.welding.activities.DeviceInfoActivity;
 import com.taal.welding.model.DeviceClass;
 import com.taal.welding.model.MachineInfoList;
 
@@ -35,7 +34,6 @@ public class MachineInfoTemp1Adapter extends BaseAdapter {
     public List<DeviceClass> mMachineInfoList;
     private Intent mIntent;
     private String mKey = "DeviceName";
-    //public int selected_position = -1;
     private InputMethodManager imm;
     private List<String> list;
 
@@ -80,53 +78,16 @@ public class MachineInfoTemp1Adapter extends BaseAdapter {
             list.add("All");
             ArrayAdapter<String> ad = new ArrayAdapter<String>(mContext, R.layout.spinner_text, list);
             viewHolder.spin.setAdapter(ad);
-            //imm.hideSoftInputFromWindow(viewHolder.value.getWindowToken(), 0);
 
             View view = ( (Activity) mContext ).getCurrentFocus();
             if ( view != null ) {
                 imm.hideSoftInputFromWindow( view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS );
             }
-            //viewHolder.checkBox.setOnCheckedChangeListener(myCheckChangList);
-            //viewHolder.value.setInputType(InputType.TYPE_NULL);
-            //viewHolder.value.setFocusable(false);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         viewHolder.devicename.setText(mMachineInfoList.get(position).getDevice());
-//        viewHolder.value.setText(mMachineInfoList.getMachineInfoClassList().get(position).getPositionvalue());
-//        viewHolder.velocityValue.setText(mMachineInfoList.getMachineInfoClassList().get(position).getVelocityVal());
-        //viewHolder.checkBox.setChecked(mMachineInfoList.getMachineInfoClassList().get(position).getCheck());
-        //System.out.println("In adapter " + mMachineInfoList.getMachineInfoClassList().get(position).getPositionvalue());
-//        if(mMachineInfoList.getMachineInfoClassList().get(position).getCheck().equals(false)) {
-//            viewHolder.checkBox.setChecked(false);
-//            viewHolder.value.setEnabled(false);
-//            viewHolder.value.setText("");
-//            viewHolder.value.setId(position);
-//            viewHolder.velocityValue.setEnabled(false);
-//            viewHolder.velocityValue.setText("");
-//            viewHolder.velocityValue.setId(position);
-//        }
-//        else if(mMachineInfoList.getMachineInfoClassList().get(position).getCheck().equals(true)){
-//            System.out.println("inside adapter else part");
-//            viewHolder.checkBox.setChecked(true);
-//            viewHolder.value.setEnabled(true);
-//            viewHolder.value.setText(mMachineInfoList.getMachineInfoClassList().get(position).getPositionvalue());
-//            viewHolder.velocityValue.setEnabled(true);
-//            viewHolder.value.setText(mMachineInfoList.getMachineInfoClassList().get(position).getVelocityVal());
-//        }
-
-//        viewHolder.devicename.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if ((viewHolder.checkBox.isChecked()) && !(viewHolder.value.getText().toString().trim().isEmpty())) {
-//                    mIntent = new Intent(mContext, DeviceInfoActivity.class);
-//                    mIntent.putExtra(mKey, viewHolder.devicename.getText().toString().trim());
-//                    mContext.startActivity(mIntent);
-//                }
-//            }
-//        });
-
         return convertView;
     }
     class ViewHolder {

@@ -11,7 +11,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,6 +36,9 @@ public class DataLogNewActivity extends AppCompatActivity {
     private Spinner sp;
     private Button but;
     private ListView listView;
+    private LinearLayout linearLayout;
+    private RelativeLayout relativeLayout;
+    private Button button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +47,9 @@ public class DataLogNewActivity extends AppCompatActivity {
         sp = (Spinner) findViewById(R.id.spinner);
         but = (Button) findViewById(R.id.button);
         listView = (ListView) findViewById(R.id.dataLogList);
+        linearLayout = (LinearLayout) findViewById(R.id.relativeLayout1);
+        relativeLayout = (RelativeLayout) findViewById(R.id.rel);
+        button = (Button) findViewById(R.id.button);
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -75,6 +83,14 @@ public class DataLogNewActivity extends AppCompatActivity {
         List<String> list = new ArrayList<String>();
         for(int i = 0; i < newList.size(); i++) {
             list.add(newList.get(i).getDevice());
+        }
+        if(list.isEmpty()) {
+            Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_SHORT).show();
+        }
+        if(!list.isEmpty()) {
+            linearLayout.setVisibility(View.VISIBLE);
+            relativeLayout.setVisibility(View.VISIBLE);
+            button.setVisibility(View.VISIBLE);
         }
         ArrayAdapter<String> ad = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_text, list);
         sp.setAdapter(ad);

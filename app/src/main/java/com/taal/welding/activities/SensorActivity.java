@@ -18,10 +18,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.taal.welding.R;
+import com.taal.welding.assistent.AndroidSharedPreferences;
 import com.taal.welding.assistent.CommunicationBaseFragment;
 import com.taal.welding.assistent.MainActivity;
 import com.taal.welding.database.DatabaseHelper;
@@ -70,6 +72,7 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
     private TextView band;
     private TextView wheel;
     private Button stopSens;
+    private RelativeLayout rel;
     private String message;
     private Connect connect;
     private int iLoop;
@@ -81,14 +84,25 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
     private String mFullCycle;
     private String mRpmFullRotation;
     private boolean connected;
-    private String ip = "192.168.0.22";
-    private int port = 20108;
+    private String ip;// = "192.168.0.22";
+    private int port;// = 20108;
+    private final String TCP_CLIENT_PORT = "tcp_client_port";
+    private final String TCP_CLIENT_IP = "tcp_client_ip";
+    private String mDevice;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
+        try {
+            ip = AndroidSharedPreferences.getString(TCP_CLIENT_IP, "");
+            String portPre = AndroidSharedPreferences.getString(TCP_CLIENT_PORT,"-1");
+            port = Integer.parseInt(portPre);
+            connect =  MainActivity.connectManager.createTcpClient(ip, port, this);
+        }
+        catch (Exception e) {
 
-        connect =  MainActivity.connectManager.createTcpClient(ip, port, this);
+        }
+
 
         db = new DatabaseHelper(getApplicationContext());
         mList = db.getAllSensors();
@@ -119,6 +133,7 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
         wheel = (TextView) findViewById(R.id.gearText);
         gyroBut = (Button) findViewById(R.id.Gyro);
         stopSens = (Button) findViewById(R.id.stopSensor);
+        rel = (RelativeLayout) findViewById(R.id.rel);
 
         gyroBut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,23 +144,31 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
         stopSens.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                connect.send("{,1,37,1,36,}".getBytes());
+                try {
+                    connect.send("{,1,37,1,36,}".getBytes());
+                }
+                catch (Exception e) {
+
+                }
+
             }
         });
 
         initial.setText("Initial values");
         for (int i = 0; i < newList.size(); i++) {
-            if(!newList.get(0).getIp().trim().isEmpty()) {
-                device = newList.get(0).getIp() + "::" +newList.get(0).getDevice();
+            if(newList.get(i).getIp().trim().equals(ip) || newList.get(i).getIp().trim().equals("192.168.0.22")) {
+                device = newList.get(i).getIp() + "::" +newList.get(i).getDevice();
+                mDevice = newList.get(i).getDevice();
                 break;
             }
         }
 
         if(device != null){
             ipText.setText(device);
+            rel.setVisibility(View.VISIBLE);
         }
         else{
-            ipText.setText("192.168.0.101" + "::" + "crc_evans");
+            Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_SHORT).show();
         }
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -172,7 +195,7 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
         try{
             if(!mListGear.isEmpty()) {
                 for(int i = 0; i < mListGear.size(); i++) {
-                    if(mListGear.get(i).getDeviceNmae().equals("crc_evans")) {
+                    if(mListGear.get(i).getDeviceNmae().equals(mDevice)) {
 //                        accX.setText(mList.get(i).getAccX());
 //                        accY.setText(mList.get(i).getAccY());
 //                        accZ.setText(mList.get(i).getAccZ());
@@ -195,52 +218,65 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
         setForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    String x = "{,2,49,1,0,22,}";
+                    connect.send(x.getBytes());
+                }
+                catch (Exception e) {
 
-                String x = "{,2,49,1,0,22,}";
-                connect.send(x.getBytes());
+                }
+
                 //send1("{,2,49,1,0,22,}");
             }
         });
         setBackward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    connect.send("{,2,49,1,1,22,}".getBytes());
+                }
+                catch (Exception e) {
 
-                connect.send("{,2,49,1,1,22,}".getBytes());
+                }
+
                 //send1("{,2,49,1,1,22,}");
             }
         });
         calibBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!(gear.getText().toString().trim().isEmpty()) && !(band.getText().toString().trim().isEmpty()) && !(wheel.getText().toString().trim().isEmpty())){
-                    String ca =  "{,10,29,1," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mListGear.get(0).getBandId() + "," + mListGear.get(0).getBandOd() + "," + mListGear.get(0).getBandMd() + "," + mListGear.get(0).getPipeId() + "," + mListGear.get(0).getPipeOd() + "," + mListGear.get(0).getPipeMd() + ",323,}";
-                    connect.send(ca.getBytes());
-                    //send1("{,4,29,1," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + ",323,}");
-                    calib.setText("Go to home position");
+                try {
+                    if(!(gear.getText().toString().trim().isEmpty()) && !(band.getText().toString().trim().isEmpty()) && !(wheel.getText().toString().trim().isEmpty())){
+                        String ca =  "{,10,29,1," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mListGear.get(0).getBandId() + "," + mListGear.get(0).getBandOd() + "," + mListGear.get(0).getBandMd() + "," + mListGear.get(0).getPipeId() + "," + mListGear.get(0).getPipeOd() + "," + mListGear.get(0).getPipeMd() + ",323,}";
+                        connect.send(ca.getBytes());
+                        //send1("{,4,29,1," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + ",323,}");
+                        calib.setText("Go to home position");
+                    }
                 }
+                catch (Exception e) {
+
+                }
+
 
             }
         });
         saveBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if(!(ipText.getText().toString().trim().isEmpty()) && !(accX.getText().toString().trim().isEmpty()) && !(accY.getText().toString().trim().isEmpty() && !(accZ.getText().toString().trim().isEmpty())
-                    && !(gyroX.getText().toString().trim().isEmpty()) && !(gyroY.getText().toString().trim().isEmpty()) && !(gyroZ.getText().toString().trim().isEmpty()) && !(magX.getText().toString().trim().isEmpty())
-                    && !(magY.getText().toString().trim().isEmpty()) && !(magZ.getText().toString().isEmpty()) && !(gear.getText().toString().trim().isEmpty()) && !(band.getText().toString().trim().isEmpty()) && !(wheel.getText().toString().trim().isEmpty()))) {
-                db.createSensor(new SensorClass("crc_evans", accX.getText().toString().trim(), accY.getText().toString().trim(), accZ.getText().toString().trim(), gyroX.getText().toString().trim(), gyroY.getText().toString().trim(), gyroZ.getText().toString().trim(), magX.getText().toString().trim(), magY.getText().toString().trim(), magZ.getText().toString().trim(), gear.getText().toString().trim(), wheel.getText().toString().trim(), band.getText().toString().trim(), mCircum, mFullCycle, mRpmFullRotation));
-                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                String ca = "{,15,46," + accX.getText().toString().trim() + "," + accY.getText().toString().trim() + "," + accZ.getText().toString().trim() + "," + gyroX.getText().toString().trim() + "," + gyroY.getText().toString().trim() + "," + gyroZ.getText().toString().trim() + "," + magX.getText().toString().trim() + "," + magY.getText().toString().trim() + "," + magZ.getText().toString().trim() + "," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mCircum + "," + mFullCycle + "," + mRpmFullRotation + ",323,}";
-                connect.send(ca.getBytes());
-                //send1("{,15,46," + accX.getText().toString().trim() + "," + accY.getText().toString().trim() + "," + accZ.getText().toString().trim() + "," + gyroX.getText().toString().trim() + "," + gyroY.getText().toString().trim() + "," + gyroZ.getText().toString().trim() + "," + magX.getText().toString().trim() + "," + magY.getText().toString().trim() + "," + magZ.getText().toString().trim() + "," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mCircum + "," + mFullCycle + "," + mRpmFullRotation + ",323,}");
-//                send1("{,15,46," + accX.getText().toString().trim() + "," + accY.getText().toString().trim() + "," + accZ.getText().toString().trim() + "," + gyroX.getText().toString().trim() + "," + gyroY.getText().toString().trim() + "," + gyroZ.getText().toString().trim() + "," + magX.getText().toString().trim() + "," + magY.getText().toString().trim() + "," + magZ.getText().toString().trim() + "," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mCircum + "," + mFullCycle + "," + mRpmFullRotation + ",323,}");
-//                send1("{,15,46," + accX.getText().toString().trim() + "," + accY.getText().toString().trim() + "," + accZ.getText().toString().trim() + "," + gyroX.getText().toString().trim() + "," + gyroY.getText().toString().trim() + "," + gyroZ.getText().toString().trim() + "," + magX.getText().toString().trim() + "," + magY.getText().toString().trim() + "," + magZ.getText().toString().trim() + "," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mCircum + "," + mFullCycle + "," + mRpmFullRotation + ",323,}");
-//                send1("{,15,46," + accX.getText().toString().trim() + "," + accY.getText().toString().trim() + "," + accZ.getText().toString().trim() + "," + gyroX.getText().toString().trim() + "," + gyroY.getText().toString().trim() + "," + gyroZ.getText().toString().trim() + "," + magX.getText().toString().trim() + "," + magY.getText().toString().trim() + "," + magZ.getText().toString().trim() + "," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mCircum + "," + mFullCycle + "," + mRpmFullRotation + ",323,}");
+                try {
+                    if(!(ipText.getText().toString().trim().isEmpty()) && !(accX.getText().toString().trim().isEmpty()) && !(accY.getText().toString().trim().isEmpty() && !(accZ.getText().toString().trim().isEmpty())
+                            && !(gyroX.getText().toString().trim().isEmpty()) && !(gyroY.getText().toString().trim().isEmpty()) && !(gyroZ.getText().toString().trim().isEmpty()) && !(magX.getText().toString().trim().isEmpty())
+                            && !(magY.getText().toString().trim().isEmpty()) && !(magZ.getText().toString().isEmpty()) && !(gear.getText().toString().trim().isEmpty()) && !(band.getText().toString().trim().isEmpty()) && !(wheel.getText().toString().trim().isEmpty()))) {
+                        db.createSensor(new SensorClass(mDevice, accX.getText().toString().trim(), accY.getText().toString().trim(), accZ.getText().toString().trim(), gyroX.getText().toString().trim(), gyroY.getText().toString().trim(), gyroZ.getText().toString().trim(), magX.getText().toString().trim(), magY.getText().toString().trim(), magZ.getText().toString().trim(), gear.getText().toString().trim(), wheel.getText().toString().trim(), band.getText().toString().trim(), mCircum, mFullCycle, mRpmFullRotation));
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                        String ca = "{,15,46," + accX.getText().toString().trim() + "," + accY.getText().toString().trim() + "," + accZ.getText().toString().trim() + "," + gyroX.getText().toString().trim() + "," + gyroY.getText().toString().trim() + "," + gyroZ.getText().toString().trim() + "," + magX.getText().toString().trim() + "," + magY.getText().toString().trim() + "," + magZ.getText().toString().trim() + "," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mCircum + "," + mFullCycle + "," + mRpmFullRotation + ",323,}";
+                        connect.send(ca.getBytes());
+                    }
+                }
+                catch (Exception e) {
 
-                //finish();
-            }
-//            if(myThreadConnectBTdevice!=null){
-//                myThreadConnectBTdevice.cancel();
-//            }
+                }
+
             }
         });
     }

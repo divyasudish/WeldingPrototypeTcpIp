@@ -1,12 +1,7 @@
 package com.taal.welding.activities;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
@@ -19,28 +14,22 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.taal.welding.R;
+import com.taal.welding.assistent.AndroidSharedPreferences;
 import com.taal.welding.assistent.MainActivity;
 import com.taal.welding.canvas.AnimationArc;
 import com.taal.welding.canvas.Arc;
 import com.taal.welding.canvas.ArrowView;
-import com.taal.welding.canvas.FloatAnimation;
 import com.taal.welding.database.DatabaseHelper;
-import com.taal.welding.model.DataLogClass;
 import com.taal.welding.model.DeviceClass;
 import com.taal.welding.model.MachineProgress;
 import com.taal.welding.model.MachineProgressList;
-import com.taal.welding.model.NewDevice;
 import com.taal.welding.model.SensorClass;
 import com.taal.welding.net.ConnectListener;
 import com.taal.welding.net.bean.Connect;
@@ -49,20 +38,12 @@ import com.taal.welding.net.bean.ConnectConfiguration;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class MachineProgressNewActivity extends AppCompatActivity implements ConnectListener {
     private String mKey = "MachineName";
@@ -70,7 +51,7 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
     private String mTitle;
     private String mProgress;
     private Bundle mBundle;
-    private Arc mArc;
+    private ArrowView mArc;
     private float mEndAngle;
     private float mArrowAngle;// = 270;
     private int mAnimationPeriod = 2000;
@@ -121,22 +102,6 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
     Runnable m_handlerTask;
     Button vas;
     private TextView connectionText;
-//    private static final int REQUEST_ENABLE_BT = 1;
-//
-//    BluetoothAdapter bluetoothAdapter;
-//
-//    ArrayList<BluetoothDevice> pairedDeviceArrayList;
-//
-//    ArrayAdapter<BluetoothDevice> pairedDeviceAdapter;
-//    private UUID myUUID;
-//    private final String UUID_STRING_WELL_KNOWN_SPP =
-//            "00001101-0000-1000-8000-00805F9B34FB";
-//
-//    ThreadConnectBTdevice myThreadConnectBTdevice;
-//    static ThreadConnected myThreadConnected;
-//    public static String msgReceived;
-//    public static StringBuilder s;
-//    public static String s_append;
     AnimationArc animation;
     int i = 1;
     String xh;
@@ -152,8 +117,8 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
     private String message;
     private TextView posTextView;
     private boolean connected;
-    private String ip = "192.168.0.22";
-    private int port = 20108;
+    private String ip;// = "192.168.0.22";
+    private int port;// = 20108;
     private Connect connect;
     int iLoop;
     private Button goHome;
@@ -168,6 +133,9 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
     private Boolean reachedHomeBoolean = false;
     private byte[] data;
     private Boolean flag_repeat = false;
+    private final String TCP_CLIENT_PORT = "tcp_client_port";
+    private final String TCP_CLIENT_IP = "tcp_client_ip";
+    private String mDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +143,15 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
         setContentView(R.layout.activity_machine_progress);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        connect =  MainActivity.connectManager.createTcpClient(ip, port, this);
+        try {
+            ip = AndroidSharedPreferences.getString(TCP_CLIENT_IP, "");
+            String portPre = AndroidSharedPreferences.getString(TCP_CLIENT_PORT,"-1");
+            port = Integer.parseInt(portPre);
+            connect =  MainActivity.connectManager.createTcpClient(ip, port, this);
+        }
+        catch (Exception e) {
+
+        }
         newList = new ArrayList<>();
         mSensorList = new ArrayList<>();
         mProgressList = new ArrayList<>();
@@ -209,7 +185,7 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
         connectionText = (TextView) findViewById(R.id.connection);
         velocityMov = (Button) findViewById(R.id.vel);
         posMove = (Button) findViewById(R.id.posMove);
-        mArc = (Arc) findViewById(R.id.arc);
+        mArc = (ArrowView) findViewById(R.id.arc);
         solenoidBut = (Button) findViewById(R.id.solenoidBut);
         goHome = (Button) findViewById(R.id.GoHome);
         RampText = (EditText) findViewById(R.id.rampText);
@@ -217,8 +193,9 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
         Direction = (TextView) findViewById(R.id.direction);
         newList = db.getAllNewDevices();
         for (int i = 0; i < newList.size(); i++) {
-            if (!newList.get(0).getIp().trim().isEmpty()) {
-                device = newList.get(0).getIp() + "::" + newList.get(0).getDevice();
+            if(newList.get(i).getIp().trim().equals(ip) || newList.get(i).getIp().trim().equals("192.168.0.22")) {
+                device = newList.get(i).getIp() + "::" +newList.get(i).getDevice();
+                mDevice = newList.get(i).getDevice();
                 break;
             }
         }
@@ -226,14 +203,20 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
         if (device != null) {
             ipText.setText(device);
         } else {
-            ipText.setText("192.168.0.101" + "::" + "crc_evans");
+            Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_SHORT).show();
         }
         mSensorList = db.getAllSensors();
         mMachineProgressList = db.getAllMachineProgressList();
         try {
             if (!mMachineProgressList.isEmpty()) {
-                pos.setText(mMachineProgressList.get(0).getPosition());
-                vel.setText(mMachineProgressList.get(0).getVelocity());
+                for(int i = 0; i < mMachineProgressList.size();i++) {
+                    if(newList.get(i).getIp().trim().equals(ip) || newList.get(i).getIp().trim().equals("192.168.0.22")) {
+                        pos.setText(mMachineProgressList.get(i).getPosition());
+                        vel.setText(mMachineProgressList.get(i).getVelocity());
+                        break;
+                    }
+                }
+
             }
 
         } catch (Exception e) {
@@ -818,7 +801,7 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
                                 runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        db.createMachineProgress(new MachineProgress("crc_evans", x[iLoop + 2], x[iLoop + 3], x[iLoop + 19]));
+                                        db.createMachineProgress(new MachineProgress(mDevice, x[iLoop + 2], x[iLoop + 3], x[iLoop + 19]));
                                         velocityMov.setEnabled(true);
                                         posMove.setEnabled(true);
                                         goHome.setEnabled(true);
@@ -860,22 +843,21 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
                                         angle1 = Float.parseFloat(x[iLoop + 23]);
 //                                        mArc.setstartAngle(angle1);
 //                                        mArc.setColorCode(Color.RED);
-                                        Direction.setText(x[iLoop  + 24]);
+                                        Direction.setText(x[iLoop + 24]);
                                         System.out.println("Angle 1 is " + angle1);
                                         if(x[iLoop + 23].length() == 1 || x[iLoop + 23].length() == 2 || x[iLoop + 23].length() == 3) {
                                             degreeText.setText(angle1 + "°");
                                         }
-
-                                        newangle = angle1 - (angle1 + 2);
-                                        mArc.setstartAngle(angle1 - 90);
+//
+//                                        newangle = angle1 - (angle1 + 2);
                                         if(angle1 < 180) {
                                             mArc.setColorCode(Color.RED);
                                         }
                                         else if(angle1 > 180) {
                                             mArc.setColorCode(Color.BLUE);
                                         }
-                                        animation = new AnimationArc(mArc, newangle - 3);
-                                        previous = angle;
+                                        animation = new AnimationArc(mArc, angle1 - 90);
+                                        //previous = angle;
                                         //animation.setDuration(1000);
                                         runOnUiThread(new Runnable() {
                                             @Override
@@ -975,7 +957,7 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
                                         }
                                     }
                                     if(flag_repeat == false) {
-                                        machineProgressListArrayList.add(new MachineProgressList("crc_evans", pos.getText().toString().trim(), vel.getText().toString().trim(), accelX.getText().toString().trim(), accelY.getText().toString().trim(), accelZ.getText().toString().trim(), gyroX.getText().toString().trim(), gyroY.getText().toString().trim(), gyroZ.getText().toString().trim(), magnetoX.getText().toString().trim(), magnetoY.getText().toString().trim(), magnetoZ.getText().toString().trim(), baro.getText().toString().trim(), temp.getText().toString().trim(), homepos.getText().toString().trim(), relEncoder.getText().toString().trim(), absEncoder.getText().toString().trim(), x[iLoop + 14]));
+                                        machineProgressListArrayList.add(new MachineProgressList(mDevice, pos.getText().toString().trim(), vel.getText().toString().trim(), accelX.getText().toString().trim(), accelY.getText().toString().trim(), accelZ.getText().toString().trim(), gyroX.getText().toString().trim(), gyroY.getText().toString().trim(), gyroZ.getText().toString().trim(), magnetoX.getText().toString().trim(), magnetoY.getText().toString().trim(), magnetoZ.getText().toString().trim(), baro.getText().toString().trim(), temp.getText().toString().trim(), homepos.getText().toString().trim(), relEncoder.getText().toString().trim(), absEncoder.getText().toString().trim(), x[iLoop + 14]));
                                     }
                                     if (x[iLoop + 14].equals("0") && x[iLoop + 15].equals("0") && x[iLoop + 21].equals("0")) {
                                         velocityTextView.setText("Machine in position clockwise move");
@@ -1007,27 +989,29 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
                                         System.out.println(e.toString());
                                     }
                                     if ((velocityMov.getText().toString().trim().equals("Clockwise") || velocityMov.getText().toString().trim().equals("ClockWise")) && x[iLoop + 14].equals("0") && (x[iLoop + 22].length() == 1 || x[iLoop + 22].length() == 2 || x[iLoop + 22].length() == 3) ) {
-                                        newangle = previous - (angle);
-                                        mArc.setstartAngle(angle - 90);
+                                        //newangle = previous - (angle);
+                                        //mArc.setstartAngle(angle - 90);
                                         if(angle < 180) {
                                             mArc.setColorCode(Color.RED);
                                         }
                                         else if(angle > 180) {
                                             mArc.setColorCode(Color.BLUE);
                                         }
-                                        animation = new AnimationArc(mArc, newangle - 3);
+                                        animation = new AnimationArc(mArc, angle - 90);
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if(newangle < 0 && newangle > -15 && angle > previous) {
+                                                if(angle > 0  && angle < 360) {
                                                     mArc.startAnimation(animation);
                                                 }
+//                                                if(newangle < 0 && newangle > -15 && angle > previous) {
+//                                                    mArc.startAnimation(animation);
+//                                                }
 
                                             }
                                         });
                                         previous = angle;
                                         //animation.setDuration(1000);
-
                                     }
 //                                    else if ((posMove.getText().toString().trim().equals("Anticlockwise")) && (angle1 == 0)) {
 //                                        angle = (interVal * 360) / (firstVal - lastVal);
@@ -1041,11 +1025,11 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
 //                                        });
 //                                    }
                                     else if (((posMove.getText().toString().trim().equals("Anticlockwise")) || posMove.getText().toString().trim().equals("AntiClockWise")) && x[iLoop + 14].equals("1") && (x[iLoop + 22].length() == 1 || x[iLoop + 22].length() == 2 || x[iLoop + 22].length() == 3) ) {
-                                        newangle = previous - (angle);
+                                        //newangle = previous - (angle);
                                         //float angleAnti = newangle;
 
                                         System.out.println("Angles are " + newangle + ".." + previous + ".." + angle);
-                                        mArc.setstartAngle((angle - 360) - 90);
+                                        //mArc.setstartAngle((angle - 360) - 90);
                                         if(angle1 < 180) {
                                             mArc.setColorCode(Color.RED);
                                         }
@@ -1053,16 +1037,16 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
                                             mArc.setColorCode(Color.BLUE);
                                         }
                                         //System.out.println("anticlk angle is " + angleAnti);
-                                        animation = new AnimationArc(mArc, -newangle - 3);
+                                        animation = new AnimationArc(mArc, (angle - 360) - 90);
                                         runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if(newangle > 0 && newangle < 15 && angle < previous) {
-                                                    mArc.startAnimation(animation);
-                                                }
+                                            if(angle > 0  && angle < 360) {
+                                                mArc.startAnimation(animation);
+                                            }
                                             }
                                         });
-                                        previous = angle;
+                                        //previous = angle;
                                         //animation.setDuration(1000);
                                     }
                                 }

@@ -29,15 +29,16 @@ public class TcpClientConnect extends Connect {
 
     @Override
     protected void build() {
-       SocketAddress sa = new InetSocketAddress(host, port);
-       socket = new Socket();
+
         try {
+            SocketAddress sa = new InetSocketAddress(host, port);
+            socket = new Socket();
             socket.connect(sa,DEFAULT_TIMEOUT);
             connState = CONNECT_STATE_CONNECTED;
             is = socket.getInputStream();
             os = socket.getOutputStream();
             Log.d(TAG, "------------------>build");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             breakConnect();
         }

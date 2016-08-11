@@ -41,11 +41,13 @@
         android:layout_marginTop="10dp"
         android:textStyle="normal"/>
     <RelativeLayout
+        android:id="@+id/rel"
         android:layout_width="360dp"
         android:layout_height="440dp"
         android:layout_below="@+id/idTitle"
         android:layout_marginTop="3dp"
         android:layout_marginLeft="10dp"
+        android:visibility="invisible"
         android:background="@drawable/edittext_border">
         <TextView
             android:id="@+id/goHomeText"
