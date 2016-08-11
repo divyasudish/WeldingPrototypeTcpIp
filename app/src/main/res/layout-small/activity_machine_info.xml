@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <ListView
+        android:id="@+id/machineInfoList"
+        android:layout_width="match_parent"
+        android:layout_height="430dp"
+        android:divider="@null"
+        android:layout_marginTop="5dp">
+    </ListView>
+    <LinearLayout
+        android:id="@+id/bottom_layout"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="#000"
+            android:layout_margin="6dp"
+            android:textAllCaps="false"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button_cyan"
+            android:text="Save" />
+
+        <Button
+            android:id="@+id/restart"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:textColor="#000"
+            android:textAllCaps="false"
+            android:layout_margin="6dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button_bg_green"
+            android:text="Restart" />
+    </LinearLayout>
+</LinearLayout>
