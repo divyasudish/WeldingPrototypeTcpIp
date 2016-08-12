@@ -38,55 +38,55 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class Motor_GairBoxActivity extends AppCompatActivity {
-    private DatabaseHelper db;
-    private List<DeviceClass> newList;
-    private String device;
-    private TextView ipText;
-    private Button set;
-    private EditText bId;
-    private EditText bOd;
-    private EditText bMd;
-    private EditText pId;
-    private EditText pMd;
-    private EditText pOd;
-    private EditText gbrText;
-    private EditText bracketText;
-    private EditText gearText;
-    private TextView rpmVal;
-    private Button confirm;
-    private String []x;
-    private TextView connectText;
-    private TextView conn;
+    @Bind(R.id.setBut)
+    protected  Button set;
+    @Bind(R.id.connection)
+    protected TextView connectText;
+    @Bind(R.id.idTitle)
+    protected TextView ipText;
+    @Bind(R.id.bId)
+    protected EditText bId;
+    @Bind(R.id.bOd)
+    protected EditText bOd;
+    @Bind(R.id.bMd)
+    protected EditText bMd;
+    @Bind(R.id.pId)
+    protected EditText pId;
+    @Bind(R.id.pMd)
+    protected EditText pMd;
+    @Bind(R.id.pOd)
+    protected EditText pOd;
+    @Bind(R.id.gbrText)
+    protected EditText gbrText;
+    @Bind(R.id.bracketText)
+    protected EditText bracketText;
+    @Bind(R.id.gearText)
+    protected EditText gearText;
+    @Bind(R.id.relative)
+    protected RelativeLayout rel;
+
     private DatabaseHelper databaseHelper;
     private List<GearBoxClass> mList;
-    private RelativeLayout rel;
     private String ip;// = "192.168.0.22";
     private int port;// = 20108;
     private final String TCP_CLIENT_PORT = "tcp_client_port";
     private final String TCP_CLIENT_IP = "tcp_client_ip";
     private String mDevice;
+    private DatabaseHelper db;
+    private List<DeviceClass> newList;
+    private String device;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_motor__gair_box);
-        rel = (RelativeLayout) findViewById(R.id.relative);
-        bId = (EditText) findViewById(R.id.bId);
-        bOd = (EditText) findViewById(R.id.bOd);
-        bMd = (EditText) findViewById(R.id.bMd);
-        pId = (EditText) findViewById(R.id.pId);
-        pOd = (EditText) findViewById(R.id.pOd);
-        pMd = (EditText) findViewById(R.id.pMd);
-        gbrText = (EditText) findViewById(R.id.gbrText);
-        bracketText = (EditText) findViewById(R.id.bracketText);
-        gearText = (EditText) findViewById(R.id.gearText);
-        //rpmVal = (TextView) findViewById(R.id.rpmtext);
-        set = (Button) findViewById(R.id.setBut);
-        //confirm = (Button) findViewById(R.id.confirmBut);
-        connectText = (TextView) findViewById(R.id.connection);
-        //conn = (TextView) findViewById(R.id.closeCon);
-        ipText = (TextView) findViewById(R.id.idTitle);
+        ButterKnife.bind(this);
+
         databaseHelper = new DatabaseHelper(this);
         mList = databaseHelper.getAllGearBoxes();
         try {
@@ -139,8 +139,6 @@ public class Motor_GairBoxActivity extends AppCompatActivity {
         else{
             Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_LONG).show();
         }
-        //confirm.setEnabled(false);
-
         try{
             if(!mList.isEmpty()) {
                 for(int i = 0; i < mList.size(); i++) {
@@ -161,33 +159,28 @@ public class Motor_GairBoxActivity extends AppCompatActivity {
         catch (Exception e){
             System.out.println(e.toString());
         }
-
-        set.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //send1("{,4,48,1," + gbrText.getText().toString().trim() + "," + gearText.getText().toString().trim() + "," + bracketText.getText().toString().trim() + "," +"323,}");
-                if(!(ipText.getText().toString().trim().isEmpty()) && !(bId.getText().toString().trim().isEmpty()) && !(bOd.getText().toString().trim().isEmpty() && !(bMd.getText().toString().trim().isEmpty())
+    }
+    @OnClick(R.id.setBut)
+    protected void set() {
+        if(!(ipText.getText().toString().trim().isEmpty()) && !(bId.getText().toString().trim().isEmpty()) && !(bOd.getText().toString().trim().isEmpty() && !(bMd.getText().toString().trim().isEmpty())
                 && !(pId.getText().toString().trim().isEmpty()) && !(pOd.getText().toString().trim().isEmpty()) && !(pMd.getText().toString().trim().isEmpty()) && !(gbrText.getText().toString().trim().isEmpty())
                 && !(bracketText.getText().toString().trim().isEmpty()) && !(gearText.getText().toString().isEmpty()))) {
-                    db.createGearBox(new GearBoxClass(mDevice, bId.getText().toString().trim(), bOd.getText().toString().trim(), bMd.getText().toString().trim(), pId.getText().toString().trim(),pOd.getText().toString().trim(), pMd.getText().toString().trim(), gbrText.getText().toString().trim(), bracketText.getText().toString().trim(), gearText.getText().toString().trim()));
-                    Toast.makeText(getApplicationContext(), "Successfully saved in database", Toast.LENGTH_SHORT).show();
-                    //finish();
-                }
+            db.createGearBox(new GearBoxClass(mDevice, bId.getText().toString().trim(), bOd.getText().toString().trim(), bMd.getText().toString().trim(), pId.getText().toString().trim(),pOd.getText().toString().trim(), pMd.getText().toString().trim(), gbrText.getText().toString().trim(), bracketText.getText().toString().trim(), gearText.getText().toString().trim()));
+            Toast.makeText(getApplicationContext(), "Successfully saved in database", Toast.LENGTH_SHORT).show();
+        }
 
-                bId.setEnabled(false);
-                bMd.setEnabled(false);
-                bOd.setEnabled(false);
-                pId.setEnabled(false);
-                pMd.setEnabled(false);
-                pOd.setEnabled(false);
-                gbrText.setEnabled(false);
-                bracketText.setEnabled(false);
-                gearText.setEnabled(false);
-                set.setEnabled(false);
+        bId.setEnabled(false);
+        bMd.setEnabled(false);
+        bOd.setEnabled(false);
+        pId.setEnabled(false);
+        pMd.setEnabled(false);
+        pOd.setEnabled(false);
+        gbrText.setEnabled(false);
+        bracketText.setEnabled(false);
+        gearText.setEnabled(false);
+        set.setEnabled(false);
 
-                finish();
-            }
-        });
+        finish();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

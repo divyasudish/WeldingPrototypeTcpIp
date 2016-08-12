@@ -9,18 +9,22 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.taal.welding.R;
 
-public class HelpActivity extends AppCompatActivity {
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
-    private TextView textView;
+public class HelpActivity extends AppCompatActivity {
+    @Bind(R.id.softwareText)
+    protected TextView textView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help);
-        textView = (TextView) findViewById(R.id.softwareText);
+        ButterKnife.bind(this);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -36,10 +40,9 @@ public class HelpActivity extends AppCompatActivity {
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        //window.setStatusBarColor(Color.BLACK);
         if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT))
         {
-            //statusbar.setVisibility(View.VISIBLE);
+
         }
         else
         {

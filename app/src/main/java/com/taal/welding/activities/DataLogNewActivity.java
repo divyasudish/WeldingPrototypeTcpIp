@@ -29,34 +29,37 @@ import com.taal.welding.model.MachineProgressList;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class DataLogNewActivity extends AppCompatActivity {
+    @Bind(R.id.spinner)
+    protected Spinner sp;
+    @Bind(R.id.button)
+    protected Button but;
+    @Bind(R.id.dataLogList)
+    protected ListView listView;
+    @Bind(R.id.relativeLayout1)
+    protected LinearLayout linearLayout;
+    @Bind(R.id.rel)
+    protected RelativeLayout relativeLayout;
+
     private DatabaseHelper db;
     private List<DeviceClass> newList;
     private List<MachineProgressList> mList;
-    private Spinner sp;
-    private Button but;
-    private ListView listView;
-    private LinearLayout linearLayout;
-    private RelativeLayout relativeLayout;
-    private Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_log_new);
-
-        sp = (Spinner) findViewById(R.id.spinner);
-        but = (Button) findViewById(R.id.button);
-        listView = (ListView) findViewById(R.id.dataLogList);
-        linearLayout = (LinearLayout) findViewById(R.id.relativeLayout1);
-        relativeLayout = (RelativeLayout) findViewById(R.id.rel);
-        button = (Button) findViewById(R.id.button);
+        ButterKnife.bind(this);
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        //window.setStatusBarColor(Color.BLACK);
         if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT))
         {
-            //statusbar.setVisibility(View.VISIBLE);
+
         }
         else
         {
@@ -90,26 +93,23 @@ public class DataLogNewActivity extends AppCompatActivity {
         if(!list.isEmpty()) {
             linearLayout.setVisibility(View.VISIBLE);
             relativeLayout.setVisibility(View.VISIBLE);
-            button.setVisibility(View.VISIBLE);
+            but.setVisibility(View.VISIBLE);
         }
         ArrayAdapter<String> ad = new ArrayAdapter<String>(getApplicationContext(), R.layout.spinner_text, list);
         sp.setAdapter(ad);
 
-        but.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    mList = MachineProgressNewActivity.machineProgressListArrayList;
-                    listView.setAdapter(new DataLogAdapter(DataLogNewActivity.this, mList));
-                }
-                catch(Exception e) {
-
-                }
-                //System.out.println(mList.get(0).getBaro() + mList.get(0).getTemp() + ".." + mList.get(0).getAbsEncoder());
-            }
-        });
-
     }
+    @OnClick(R.id.button)
+    protected void click() {
+        try {
+            mList = MachineProgressNewActivity.machineProgressListArrayList;
+            listView.setAdapter(new DataLogAdapter(DataLogNewActivity.this, mList));
+        }
+        catch(Exception e) {
+
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

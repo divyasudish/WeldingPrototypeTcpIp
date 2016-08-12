@@ -33,7 +33,38 @@ import com.taal.welding.model.NewDevice;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class NewDeviceActivity extends AppCompatActivity {
+    @Bind(R.id.sub)
+    protected Button submit;
+    @Bind(R.id.checkbox1)
+    protected CheckBox checkBox1;
+//    @Bind(R.id.checkbox2)
+//    protected CheckBox checkBox2;
+//    @Bind(R.id.checkbox3)
+//    protected CheckBox checkBox3;
+    @Bind(R.id.ipValue1)
+    protected TextView ip1;
+    @Bind(R.id.devicenameValue1)
+    protected TextView device1;
+    @Bind(R.id.spinner1)
+    protected Spinner sp1;
+//    @Bind(R.id.ipValue2)
+//    protected TextView ip2;
+//    @Bind(R.id.devicenameValue2)
+//    protected TextView device2;
+//    @Bind(R.id.spinner2)
+//    protected Spinner sp2;
+//    @Bind(R.id.ipValue3)
+//    protected TextView ip3;
+//    @Bind(R.id.devicenameValue3)
+//    protected TextView device3;
+//    @Bind(R.id.spinner3)
+//    protected Spinner sp3;
+
     private ArrayAdapter<String> adapter;
     private List<String> list;
     private List<String> list1;
@@ -45,48 +76,15 @@ public class NewDeviceActivity extends AppCompatActivity {
     //private ListView listView;
     private ArrayList<DeviceClass> newDeviceList;
     private List<DeviceClass> mList;
-    private Button submit;
     private DeviceInfoAdapter deviceInfoAdapter;
-    private CheckBox checkBox1;
-    private TextView ip1;
-    private EditText device1;
-    private Spinner sp1;
-
-    private CheckBox checkBox2;
-    private TextView ip2;
-    private EditText device2;
-    private Spinner sp2;
-
-    private CheckBox checkBox3;
-    private TextView ip3;
-    private EditText device3;
-    private Spinner sp3;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_device);
+        ButterKnife.bind(this);
         db = new DatabaseHelper(getApplicationContext());
         newDeviceList = new ArrayList<>();
-        //listView = (ListView) findViewById(R.id.newDeviceList);
-        //add_New = (Button) findViewById(R.id.add);
-        checkBox1 = (CheckBox) findViewById(R.id.checkbox1);
-        ip1 = (TextView) findViewById(R.id.ipValue1);
-        device1 = (EditText) findViewById(R.id.devicenameValue1);
-        sp1 = (Spinner) findViewById(R.id.spinner1);
-
-//        checkBox2 = (CheckBox) findViewById(R.id.checkbox2);
-//        ip2 = (TextView) findViewById(R.id.ipValue2);
-//        device2 = (EditText) findViewById(R.id.devicenameValue2);
-//        sp2 = (Spinner) findViewById(R.id.spinner2);
-//
-//        checkBox3 = (CheckBox) findViewById(R.id.checkbox3);
-//        ip3 = (TextView) findViewById(R.id.ipValue3);
-//        device3 = (EditText) findViewById(R.id.devicenameValue3);
-//        sp3 = (Spinner) findViewById(R.id.spinner3);
-
-        submit = (Button) findViewById(R.id.sub);
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
@@ -183,26 +181,19 @@ public class NewDeviceActivity extends AppCompatActivity {
             System.out.println("jhjh " + e.toString());
         }
         deviceInfoAdapter = new DeviceInfoAdapter(NewDeviceActivity.this, newDeviceList);
-        //listView.setAdapter(deviceInfoAdapter);
-//        add_New.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                newDeviceList.add(new DeviceClass(" ", " ", " "));
-//                deviceInfoAdapter.notifyDataSetChanged();
-//            }
-//        });
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(checkBox1.isChecked()) {
-                        if(!(ip1.getText().toString().trim().isEmpty()) && !(device1.getText().toString().trim().isEmpty()) && !(sp1.getSelectedItem().toString().trim().isEmpty())) {
-                            db.createNewDevice(new DeviceClass(ip1.getText().toString().trim(), device1.getText().toString().trim(), sp1.getSelectedItem().toString().trim()));
-                        }
-                        else {
-                            Toast.makeText(getApplicationContext(), "Please enter device name", Toast.LENGTH_LONG).show();
-                        }
-                    }
+
+    }
+    @OnClick(R.id.sub)
+    protected void submit(){
+        try {
+            if(checkBox1.isChecked()) {
+                if(!(ip1.getText().toString().trim().isEmpty()) && !(device1.getText().toString().trim().isEmpty()) && !(sp1.getSelectedItem().toString().trim().isEmpty())) {
+                    db.createNewDevice(new DeviceClass(ip1.getText().toString().trim(), device1.getText().toString().trim(), sp1.getSelectedItem().toString().trim()));
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Please enter device name", Toast.LENGTH_LONG).show();
+                }
+            }
 //                    if(checkBox2.isChecked()) {
 //                        if(!(ip2.getText().toString().trim().isEmpty()) && !(device2.getText().toString().trim().isEmpty()) && !(sp2.getSelectedItem().toString().trim().isEmpty())) {
 //                            db.createNewDevice(new DeviceClass(ip2.getText().toString().trim(), device2.getText().toString().trim(), sp2.getSelectedItem().toString().trim()));
@@ -219,18 +210,13 @@ public class NewDeviceActivity extends AppCompatActivity {
 //                            Toast.makeText(getApplicationContext(), "Please enter device name", Toast.LENGTH_LONG).show();
 //                        }
 //                    }
-                    if((checkBox1.isChecked() && !(device1.getText().toString().trim().isEmpty()))){
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                    }
-                }
-                catch (Exception e) {
-                    System.out.println(e.toString());
-                }
-
+            if((checkBox1.isChecked() && !(device1.getText().toString().trim().isEmpty()))){
+                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
             }
-        });
-
-
+        }
+        catch (Exception e) {
+            System.out.println(e.toString());
+        }
     }
 
     @Override

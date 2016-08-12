@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 
 import com.taal.welding.R;
@@ -297,6 +298,7 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
                 return;
             }
             connect =  MainActivity.connectManager.createTcpClient(ip, port, this);
+            Toast.makeText(getActivity(), ip + ".." + port, Toast.LENGTH_LONG).show();
             localIp = WifiUtils.getIp(getActivity());
 
             showLocalIpInfo(localIp);

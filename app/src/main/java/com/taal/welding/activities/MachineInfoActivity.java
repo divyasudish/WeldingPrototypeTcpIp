@@ -48,48 +48,55 @@ import butterknife.OnClick;
 public class MachineInfoActivity extends AppCompatActivity {
     @Bind(R.id.save)
     protected Button mSave;
+    @Bind(R.id.checkbox1)
+    protected CheckBox checkBox1;
+    @Bind(R.id.checkbox2)
+    protected CheckBox checkBox2;
+    @Bind(R.id.checkbox3)
+    protected CheckBox checkBox3;
+    @Bind(R.id.selectCheck)
+    protected CheckBox checkAll;
+    @Bind(R.id.ipValue1)
+    protected TextView ip1;
+    @Bind(R.id.devicenameValue1)
+    protected TextView device1;
+    @Bind(R.id.spinner1)
+    protected TextView sp1;
+    @Bind(R.id.ipValue2)
+    protected TextView ip2;
+    @Bind(R.id.devicenameValue2)
+    protected TextView device2;
+    @Bind(R.id.spinner2)
+    protected TextView sp2;
+    @Bind(R.id.ipValue3)
+    protected TextView ip3;
+    @Bind(R.id.devicenameValue3)
+    protected TextView device3;
+    @Bind(R.id.spinner3)
+    protected TextView sp3;
+    @Bind(R.id.ipAddress)
+    protected TextView ipAddress;
+    @Bind(R.id.devicename)
+    protected TextView devicename;
+    @Bind(R.id.submit)
+    protected TextView oprn;
+    @Bind(R.id.connection)
+    protected TextView connectionText;
+
     private MachineInfoList mMachineList;
-    private ArrayList<DeviceClass> mArrayList;
-    private Intent mIntent;
-    private String mTitle;
-    private String mProgressData;
     public MachineInfoTemp1Adapter machineInfoAdapter;
     private DatabaseHelper databaseHelper;
     private List<DeviceClass> mList;
-    private CheckBox checkBox1;
-    private TextView ip1;
-    private TextView device1;
-    private TextView sp1;
-
-    private CheckBox checkBox2;
-    private TextView ip2;
-    private TextView device2;
-    private TextView sp2;
-
-    private CheckBox checkBox3;
-    private TextView ip3;
-    private TextView device3;
-    private TextView sp3;
-
-    private TextView ipAddress;
-    private TextView devicename;
-    private TextView oprn;
-
-    private CheckBox checkAll;
-    private TextView connectionText;
     public static StringBuilder s;
-    public static String s_append;
-    private String []x;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_machine_info);
-        connectionText = (TextView) findViewById(R.id.connection);
+        ButterKnife.bind(this);
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        //window.setStatusBarColor(Color.BLACK);
         if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT))
         {
             //statusbar.setVisibility(View.VISIBLE);
@@ -100,26 +107,6 @@ public class MachineInfoActivity extends AppCompatActivity {
         }
         ButterKnife.bind(this);
         databaseHelper = new DatabaseHelper(this);
-        checkBox1 = (CheckBox) findViewById(R.id.checkbox1);
-        ip1 = (TextView) findViewById(R.id.ipValue1);
-        device1 = (TextView) findViewById(R.id.devicenameValue1);
-        sp1 = (TextView) findViewById(R.id.spinner1);
-
-        checkBox2 = (CheckBox) findViewById(R.id.checkbox2);
-        ip2 = (TextView) findViewById(R.id.ipValue2);
-        device2 = (TextView) findViewById(R.id.devicenameValue2);
-        sp2 = (TextView) findViewById(R.id.spinner2);
-
-        checkBox3 = (CheckBox) findViewById(R.id.checkbox3);
-        ip3 = (TextView) findViewById(R.id.ipValue3);
-        device3 = (TextView) findViewById(R.id.devicenameValue3);
-        sp3 = (TextView) findViewById(R.id.spinner3);
-
-        checkAll = (CheckBox) findViewById(R.id.selectCheck);
-        ipAddress = (TextView) findViewById(R.id.ipAddress);
-        devicename = (TextView) findViewById(R.id.devicename);
-        oprn = (TextView) findViewById(R.id.submit);
-
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -136,7 +123,6 @@ public class MachineInfoActivity extends AppCompatActivity {
         mList =  new ArrayList<DeviceClass>();
         mList = databaseHelper.getAllNewDevices();
         System.out.println("mList size is " + mList.size());
-
 
         try {
             if(!mList.isEmpty()) {
@@ -166,8 +152,6 @@ public class MachineInfoActivity extends AppCompatActivity {
                     device3.setText(mList.get(2).getDevice());
                     sp3.setText(mList.get(2).getOperation());
                 }
-
-                //newDeviceList.addAll(mList);
             }
             if(mList.isEmpty()){
                 Toast.makeText(getApplicationContext(), "No device in Database", Toast.LENGTH_SHORT).show();

@@ -94,8 +94,13 @@ public class MainActivity extends AppCompatActivity implements BaseFragment.Main
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                DrawerLeftAdapter.DrawerMenuItem menuItem =
 //                        (DrawerLeftAdapter.DrawerMenuItem) listView.getAdapter().getItem(position);
+            try {
                 menuClick();
                 menuItemChange(position);
+            }
+            catch (Exception e) {
+
+            }
             }
         });
 

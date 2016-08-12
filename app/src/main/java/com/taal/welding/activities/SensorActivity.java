@@ -45,38 +45,66 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class SensorActivity extends AppCompatActivity implements ConnectListener {
-    private DatabaseHelper db;
-    private List<DeviceClass> newList;
-    private String device;
-    private TextView ipText;
-    private Button setForward;
-    private Button setBackward;
-    private TextView homeText;
-    private TextView calib;
-    private Button calibBut;
-    private TextView initial;
-    private TextView accX;
-    private TextView accY;
-    private TextView accZ;
-    private TextView gyroX;
-    private TextView gyroY;
-    private TextView gyroZ;
-    private TextView magX;
-    private TextView magY;
-    private TextView magZ;
-    private Button saveBut;
-    private TextView connectText;
-    private Button gyroBut;
-    private TextView gear;
-    private TextView band;
-    private TextView wheel;
-    private Button stopSens;
-    private RelativeLayout rel;
+    @Bind(R.id.SetForwordHome)
+    protected Button setForward;
+    @Bind(R.id.setBackward)
+    protected Button setBackward;
+    @Bind(R.id.calibrateBut)
+    protected Button calibBut;
+    @Bind(R.id.save)
+    protected Button saveBut;
+    @Bind(R.id.stopSensor)
+    protected Button stopSens;
+    @Bind(R.id.Gyro)
+    protected Button gyroBut;
+    @Bind(R.id.idTitle)
+    protected TextView ipText;
+    @Bind(R.id.accX)
+    protected TextView accX;
+    @Bind(R.id.accY)
+    protected TextView accY;
+    @Bind(R.id.accZ)
+    protected TextView accZ;
+    @Bind(R.id.gyroX)
+    protected TextView gyroX;
+    @Bind(R.id.gyroY)
+    protected TextView gyroY;
+    @Bind(R.id.gyroZ)
+    protected TextView gyroZ;
+    @Bind(R.id.magX)
+    protected TextView magX;
+    @Bind(R.id.magY)
+    protected TextView magY;
+    @Bind(R.id.magZ)
+    protected TextView magZ;
+    @Bind(R.id.gbrText)
+    protected TextView gear;
+    @Bind(R.id.bracketText)
+    protected TextView band;
+    @Bind(R.id.gearText)
+    protected TextView wheel;
+    @Bind(R.id.goHomeText)
+    protected TextView homeText;
+    @Bind(R.id.calbrate)
+    protected TextView calib;
+    @Bind(R.id.Initial)
+    protected TextView initial;
+    @Bind(R.id.connection)
+    protected TextView connectText;
+    @Bind(R.id.rel)
+    protected RelativeLayout rel;
+
     private String message;
     private Connect connect;
     private int iLoop;
-
+    private DatabaseHelper db;
+    private List<DeviceClass> newList;
+    private String device;
     private String []x;
     private List<SensorClass> mList;
     private List<GearBoxClass> mListGear;
@@ -93,6 +121,7 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensor);
+        ButterKnife.bind(this);
         try {
             ip = AndroidSharedPreferences.getString(TCP_CLIENT_IP, "");
             String portPre = AndroidSharedPreferences.getString(TCP_CLIENT_PORT,"-1");
@@ -109,50 +138,6 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
         mListGear = db.getAllGearBoxes();
         newList = new ArrayList<>();
         newList = db.getAllNewDevices();
-        ipText = (TextView) findViewById(R.id.idTitle);
-
-        homeText = (TextView) findViewById(R.id.goHomeText);
-        calib = (TextView) findViewById(R.id.calbrate);
-        calibBut = (Button) findViewById(R.id.calibrateBut);
-        initial = (TextView) findViewById(R.id.Initial);
-        setForward = (Button) findViewById(R.id.SetForwordHome);
-        setBackward = (Button) findViewById(R.id.setBackward);
-        accX = (TextView) findViewById(R.id.accX);
-        accY = (TextView) findViewById(R.id.accY);
-        accZ = (TextView) findViewById(R.id.accZ);
-        gyroX = (TextView) findViewById(R.id.gyroX);
-        gyroY = (TextView) findViewById(R.id.gyroY);
-        gyroZ = (TextView) findViewById(R.id.gyroZ);
-        magX = (TextView) findViewById(R.id.magX);
-        magY = (TextView) findViewById(R.id.magY);
-        magZ = (TextView) findViewById(R.id.magZ);
-        saveBut = (Button) findViewById(R.id.save);
-        connectText = (TextView) findViewById(R.id.connection);
-        gear = (TextView) findViewById(R.id.gbrText);
-        band = (TextView) findViewById(R.id.bracketText);
-        wheel = (TextView) findViewById(R.id.gearText);
-        gyroBut = (Button) findViewById(R.id.Gyro);
-        stopSens = (Button) findViewById(R.id.stopSensor);
-        rel = (RelativeLayout) findViewById(R.id.rel);
-
-        gyroBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            startActivity(new Intent(getApplicationContext(), Motor_GairBoxActivity.class));
-            }
-        });
-        stopSens.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    connect.send("{,1,37,1,36,}".getBytes());
-                }
-                catch (Exception e) {
-
-                }
-
-            }
-        });
 
         initial.setText("Initial values");
         for (int i = 0; i < newList.size(); i++) {
@@ -196,15 +181,6 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
             if(!mListGear.isEmpty()) {
                 for(int i = 0; i < mListGear.size(); i++) {
                     if(mListGear.get(i).getDeviceNmae().equals(mDevice)) {
-//                        accX.setText(mList.get(i).getAccX());
-//                        accY.setText(mList.get(i).getAccY());
-//                        accZ.setText(mList.get(i).getAccZ());
-//                        gyroX.setText(mList.get(i).getGyroX());
-//                        gyroY.setText(mList.get(i).getGyroY());
-//                        gyroZ.setText(mList.get(i).getGyroZ());
-//                        magX.setText(mList.get(i).getMagX());
-//                        magY.setText(mList.get(i).getMagY());
-//                        magZ.setText(mList.get(i).getMagZ());
                         gear.setText(mListGear.get(i).getGbr());
                         band.setText(mListGear.get(i).getBandDia());
                         wheel.setText(mListGear.get(i).getGearwheelDia());
@@ -215,70 +191,69 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
         catch (Exception e){
             System.out.println(e.toString());
         }
-        setForward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    String x = "{,2,49,1,0,22,}";
-                    connect.send(x.getBytes());
-                }
-                catch (Exception e) {
 
-                }
+    }
+    @OnClick(R.id.SetForwordHome)
+    protected void setForwardClick(){
+        try {
+            String x = "{,2,49,1,0,22,}";
+            connect.send(x.getBytes());
+        }
+        catch (Exception e) {
 
-                //send1("{,2,49,1,0,22,}");
+        }
+    }
+    @OnClick(R.id.setBackward)
+    protected void setbackward(){
+        try {
+            connect.send("{,2,49,1,1,22,}".getBytes());
+        }
+        catch (Exception e) {
+
+        }
+    }
+    @OnClick(R.id.calibrateBut)
+    protected void setcalib(){
+        try {
+            if(!(gear.getText().toString().trim().isEmpty()) && !(band.getText().toString().trim().isEmpty()) && !(wheel.getText().toString().trim().isEmpty())){
+                String ca =  "{,10,29,1," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mListGear.get(0).getBandId() + "," + mListGear.get(0).getBandOd() + "," + mListGear.get(0).getBandMd() + "," + mListGear.get(0).getPipeId() + "," + mListGear.get(0).getPipeOd() + "," + mListGear.get(0).getPipeMd() + ",323,}";
+                connect.send(ca.getBytes());
+                //send1("{,4,29,1," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + ",323,}");
+                calib.setText("Go to home position");
             }
-        });
-        setBackward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    connect.send("{,2,49,1,1,22,}".getBytes());
-                }
-                catch (Exception e) {
+        }
+        catch (Exception e) {
 
-                }
-
-                //send1("{,2,49,1,1,22,}");
+        }
+    }
+    @OnClick(R.id.save)
+    protected void save(){
+        try {
+            if(!(ipText.getText().toString().trim().isEmpty()) && !(accX.getText().toString().trim().isEmpty()) && !(accY.getText().toString().trim().isEmpty() && !(accZ.getText().toString().trim().isEmpty())
+                    && !(gyroX.getText().toString().trim().isEmpty()) && !(gyroY.getText().toString().trim().isEmpty()) && !(gyroZ.getText().toString().trim().isEmpty()) && !(magX.getText().toString().trim().isEmpty())
+                    && !(magY.getText().toString().trim().isEmpty()) && !(magZ.getText().toString().isEmpty()) && !(gear.getText().toString().trim().isEmpty()) && !(band.getText().toString().trim().isEmpty()) && !(wheel.getText().toString().trim().isEmpty()))) {
+                db.createSensor(new SensorClass(mDevice, accX.getText().toString().trim(), accY.getText().toString().trim(), accZ.getText().toString().trim(), gyroX.getText().toString().trim(), gyroY.getText().toString().trim(), gyroZ.getText().toString().trim(), magX.getText().toString().trim(), magY.getText().toString().trim(), magZ.getText().toString().trim(), gear.getText().toString().trim(), wheel.getText().toString().trim(), band.getText().toString().trim(), mCircum, mFullCycle, mRpmFullRotation));
+                Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
+                String ca = "{,15,46," + accX.getText().toString().trim() + "," + accY.getText().toString().trim() + "," + accZ.getText().toString().trim() + "," + gyroX.getText().toString().trim() + "," + gyroY.getText().toString().trim() + "," + gyroZ.getText().toString().trim() + "," + magX.getText().toString().trim() + "," + magY.getText().toString().trim() + "," + magZ.getText().toString().trim() + "," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mCircum + "," + mFullCycle + "," + mRpmFullRotation + ",323,}";
+                connect.send(ca.getBytes());
             }
-        });
-        calibBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(!(gear.getText().toString().trim().isEmpty()) && !(band.getText().toString().trim().isEmpty()) && !(wheel.getText().toString().trim().isEmpty())){
-                        String ca =  "{,10,29,1," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mListGear.get(0).getBandId() + "," + mListGear.get(0).getBandOd() + "," + mListGear.get(0).getBandMd() + "," + mListGear.get(0).getPipeId() + "," + mListGear.get(0).getPipeOd() + "," + mListGear.get(0).getPipeMd() + ",323,}";
-                        connect.send(ca.getBytes());
-                        //send1("{,4,29,1," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + ",323,}");
-                        calib.setText("Go to home position");
-                    }
-                }
-                catch (Exception e) {
+        }
+        catch (Exception e) {
 
-                }
+        }
+    }
+    @OnClick(R.id.stopSensor)
+    protected void stop(){
+        try {
+            connect.send("{,1,37,1,36,}".getBytes());
+        }
+        catch (Exception e) {
 
-
-            }
-        });
-        saveBut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    if(!(ipText.getText().toString().trim().isEmpty()) && !(accX.getText().toString().trim().isEmpty()) && !(accY.getText().toString().trim().isEmpty() && !(accZ.getText().toString().trim().isEmpty())
-                            && !(gyroX.getText().toString().trim().isEmpty()) && !(gyroY.getText().toString().trim().isEmpty()) && !(gyroZ.getText().toString().trim().isEmpty()) && !(magX.getText().toString().trim().isEmpty())
-                            && !(magY.getText().toString().trim().isEmpty()) && !(magZ.getText().toString().isEmpty()) && !(gear.getText().toString().trim().isEmpty()) && !(band.getText().toString().trim().isEmpty()) && !(wheel.getText().toString().trim().isEmpty()))) {
-                        db.createSensor(new SensorClass(mDevice, accX.getText().toString().trim(), accY.getText().toString().trim(), accZ.getText().toString().trim(), gyroX.getText().toString().trim(), gyroY.getText().toString().trim(), gyroZ.getText().toString().trim(), magX.getText().toString().trim(), magY.getText().toString().trim(), magZ.getText().toString().trim(), gear.getText().toString().trim(), wheel.getText().toString().trim(), band.getText().toString().trim(), mCircum, mFullCycle, mRpmFullRotation));
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT).show();
-                        String ca = "{,15,46," + accX.getText().toString().trim() + "," + accY.getText().toString().trim() + "," + accZ.getText().toString().trim() + "," + gyroX.getText().toString().trim() + "," + gyroY.getText().toString().trim() + "," + gyroZ.getText().toString().trim() + "," + magX.getText().toString().trim() + "," + magY.getText().toString().trim() + "," + magZ.getText().toString().trim() + "," + gear.getText().toString().trim() + "," + wheel.getText().toString().trim() + "," + band.getText().toString().trim() + "," + mCircum + "," + mFullCycle + "," + mRpmFullRotation + ",323,}";
-                        connect.send(ca.getBytes());
-                    }
-                }
-                catch (Exception e) {
-
-                }
-
-            }
-        });
+        }
+    }
+    @OnClick(R.id.Gyro)
+    protected void gyro(){
+        startActivity(new Intent(getApplicationContext(), Motor_GairBoxActivity.class));
     }
 
     @Override
@@ -304,7 +279,7 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
                                     mListGear = db.getAllGearBoxes();
                                     if(!mListGear.isEmpty()) {
                                         for(int i = 0; i < mListGear.size(); i++) {
-                                            if(mListGear.get(i).getDeviceNmae().equals("crc_evans")) {
+                                            if(mListGear.get(i).getDeviceNmae().equals(mDevice)) {
                                                 gear.setText(mListGear.get(i).getGbr());
                                                 band.setText(mListGear.get(i).getBandDia());
                                                 wheel.setText(mListGear.get(i).getGearwheelDia());
@@ -368,7 +343,6 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
     public void connectBreak(ConnectConfiguration configuration) {
         System.out.println("------------------>connectBreak");
         connected = false;
-        //Toast.makeText(getApplicationContext(), "Connection break ", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -396,7 +370,6 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
                         catch(Exception e) {
 
                         }
-                        //rpmVal.setText(x[1]);
                     }
 //                    else if(x[iLoop].equals("300") || x[1].equals("300") || x[0].equals("300")){
 //                        initial.setText("Packet error ");
@@ -418,9 +391,6 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
                                         magX.setText(x[iLoop + 7]);
                                         magY.setText(x[iLoop + 8]);
                                         magZ.setText(x[iLoop + 9]);
-//                                        gear.setText(x[iLoop + 10]);
-//                                        band.setText(x[iLoop + 11]);
-//                                        wheel.setText(x[iLoop + 12]);
                                         mCircum = x[iLoop + 13];
                                         mFullCycle = x[iLoop + 14];
                                         mRpmFullRotation = x[iLoop + 15];

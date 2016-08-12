@@ -49,10 +49,9 @@ public class ForgotActivity extends AppCompatActivity {
 
         Window window = getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        //window.setStatusBarColor(Color.BLACK);
         if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT))
         {
-            //statusbar.setVisibility(View.VISIBLE);
+
         }
         else
         {
@@ -91,7 +90,6 @@ public class ForgotActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
-                //finish();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -120,19 +118,5 @@ public class ForgotActivity extends AppCompatActivity {
                 flag = false;
             }
         }
-//        if(flag == false) {
-//            Toast.makeText(getApplicationContext(), "Please enter correct registered name", Toast.LENGTH_SHORT).show();
-//        }
-//        if(flag || allTags.isEmpty()) {
-//            if(mPassword.getText().toString().trim().equals(mConfirmPassword.getText().toString().trim())){
-//                db.createReg(new RegistrationClass(mName.getText().toString().trim(), mUsername.getText().toString().trim(), mPassword.getText().toString().trim(), mConfirmPassword.getText().toString().trim()));
-//                mIntent = new Intent(this, LoginActivity.class);
-//                startActivity(mIntent);
-//
-//            }
-//            else {
-//                Toast.makeText(getApplicationContext(), "Does not match password and confirm password", Toast.LENGTH_LONG).show();
-//            }
-//        }
     }
 }

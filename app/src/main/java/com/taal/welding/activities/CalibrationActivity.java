@@ -25,7 +25,7 @@ import java.util.List;
 @SuppressWarnings("deprecation")
 public class CalibrationActivity extends TabActivity {
 
-    TabHost TabHostWindow;
+    private TabHost TabHostWindow;
     private DatabaseHelper db;
     private List<DeviceClass> newList;
     private String device;

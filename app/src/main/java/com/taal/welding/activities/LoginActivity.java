@@ -62,7 +62,6 @@ public class LoginActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         if (getSupportActionBar() != null) {
-            //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
             try{
                 getSupportActionBar().setTitle("BLDC PoC");
@@ -73,10 +72,9 @@ public class LoginActivity extends AppCompatActivity {
                 System.out.println(e.toString());
             }
         }
-        //window.setStatusBarColor(Color.BLACK);
         if ((Build.VERSION.SDK_INT == Build.VERSION_CODES.JELLY_BEAN) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.ICE_CREAM_SANDWICH) || (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT))
         {
-            //statusbar.setVisibility(View.VISIBLE);
+
         }
         else
         {
@@ -115,21 +113,15 @@ public class LoginActivity extends AppCompatActivity {
                     loginPrefsEditor.clear();
                     loginPrefsEditor.commit();
                 }
-//                mIntent = new Intent(this, MainMenuActivity.class);
-//                mIntent.putExtra(KEY, tag.get_name().toString().trim());
-//                startActivity(mIntent);
                 mIntent = new Intent(this, MainActivity.class);
                 startActivity(mIntent);
                 flag = true;
-                //finish();
                 System.out.println("Hello in first page ");
                 break;
             }
             Log.d("Tag Name", tag.get_name() + tag.get_id() + tag.get_password() + tag.get_userName());
         }
         if(!flag) {
-//            mUsername.setText("");
-//            mPasswprd.setText("");
             Toast.makeText(getApplicationContext(), "Invalid Username or Password", Toast.LENGTH_LONG).show();
         }
     }
