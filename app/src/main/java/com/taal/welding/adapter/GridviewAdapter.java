@@ -70,45 +70,48 @@ public class GridviewAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Holder holder=new Holder();
         View rowView;
-
         rowView = mInflater.inflate(R.layout.gridview_item, null);
         holder.tv=(TextView) rowView.findViewById(R.id.textView1);
         holder.img = (ImageView) rowView.findViewById(R.id.img);
         holder.tv.setText(result[position]);
         holder.img.setImageResource(imageId[position]);
-
         rowView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (holder.tv.getText().toString().trim().equals("New Device")) {
+            switch (holder.tv.getText().toString().trim()) {
+                case "New Device":
                     mIntent = new Intent(context, NewDeviceActivity.class);
                     context.startActivity(mIntent);
-                } else if (holder.tv.getText().toString().trim().equals("Device List")) {
+                    break;
+                case "Device List":
                     mIntent = new Intent(context, MachineInfoActivity.class);
                     mIntent.putExtra(mKey, "Device");
                     context.startActivity(mIntent);
-                } else if (holder.tv.getText().toString().trim().equals("Data Log")) {
+                    break;
+                case "Data Log":
                     mIntent = new Intent(context, DataLogNewActivity.class);
                     context.startActivity(mIntent);
-                } else if (holder.tv.getText().toString().trim().equals("Torch Head Position")) {
+                    break;
+                case "Torch Head Position":
                     mIntent = new Intent(context, MachineProgressNewActivity.class);
                     context.startActivity(mIntent);
-                } else if (holder.tv.getText().toString().trim().equals("Calibration")) {
+                    break;
+                case "Calibration":
                     mIntent = new Intent(context, SensorActivity.class);
                     context.startActivity(mIntent);
-                } else if (holder.tv.getText().toString().trim().equals("GearBox Status")) {
+                    break;
+                case "GearBox Status":
                     mIntent = new Intent(context, Motor_GairBoxActivity.class);
                     context.startActivity(mIntent);
-                }
-                else if (holder.tv.getText().toString().trim().equals("Firmware Upgrade")) {
+                    break;
+                case "Firmware Upgrade":
                     mIntent = new Intent(context, UpgradeFirmwareActivity.class);
                     context.startActivity(mIntent);
-                }
-                else if (holder.tv.getText().toString().trim().equals("Help")) {
-                    mIntent = new Intent(context, HelpActivity.class);
-                    context.startActivity(mIntent);
-                }
+
+                default:
+                    System.out.println("Else ");
+            }
             }
         });
 

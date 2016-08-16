@@ -53,7 +53,7 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
     private boolean isHexDisplay;
     private Timer timer;
 
-    private final int TIME_SEND = 0 ;
+    private final int TIME_SEND = 0;
     private boolean isTmeiDialogClicked = false;
     private Intent mIntent;
 

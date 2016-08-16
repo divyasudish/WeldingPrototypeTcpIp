@@ -7,7 +7,8 @@
     <com.taal.welding.assistent.views.RevealBackgroundView
         android:id="@+id/revealBackgroundView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:background="@drawable/back8"/>
 
     <include
         android:id="@+id/toolbar"

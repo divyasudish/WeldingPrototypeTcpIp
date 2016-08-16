@@ -58,10 +58,10 @@ public class RevealBackgroundView extends View {
     }
 
 
-    private void init(){
+    private void init() {
         fillPaint = new Paint();
         fillPaint.setStyle(Paint.Style.FILL);
-        fillPaint.setColor(getResources().getColor(R.color.config_item_hl));
+        fillPaint.setColor(getResources().getColor(R.color.btn_context_menu_normal));
     }
 
 
@@ -70,7 +70,7 @@ public class RevealBackgroundView extends View {
     }
 
 
-    public void startFromLocation(int[] location){
+    public void startFromLocation(int[] location) {
         changeState(STATE_FILL_STARTED);
         startLocationX = location[0];
         startLocationY = location[1];

@@ -648,7 +648,7 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
                 x = strMsg.split(",");
                 System.out.println(strMsg);
                 Boolean flag_Loop = false;
-                for(iLoop = 0; iLoop < x.length; iLoop++){
+                for(iLoop = 0; iLoop < x.length; iLoop++) {
                     if ((x[iLoop].equals("46")) && (velFlag || posFlag)) {
                         try {
                             runOnUiThread(new Runnable() {

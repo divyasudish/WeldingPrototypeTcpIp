@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="40dp"
-    android:visibility="invisible"
-    android:background="@drawable/drawable_bg_conn">
+    android:visibility="invisible">
+    <!--android:background="@drawable/drawable_bg_conn">-->
 
     <ImageView
         android:id="@+id/iv_conn_state"
@@ -17,7 +17,7 @@
         android:layout_toRightOf="@id/iv_conn_state"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:textColor="#53b7e6"
+        android:textColor="#000000"
         android:textSize="14sp"
         android:layout_centerVertical="true"
         android:layout_marginLeft="8dp"
@@ -30,7 +30,7 @@
         android:layout_alignParentRight="true"
         android:text="@string/connect"
         android:textSize="14sp"
-        android:textColor="#53b7e6"
+        android:textColor="#000000"
         android:background="@drawable/btn_default_light"/>
 
     <View

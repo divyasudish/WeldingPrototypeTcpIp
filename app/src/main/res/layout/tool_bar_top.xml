@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:elevation="8dp"
-    android:background="#363a45"
+    android:background="@color/colorPrimary"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
     <TextView
         android:id="@+id/tv_toolbar_title"

@@ -63,8 +63,8 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
     RecyclerView rvMsg;
 
 
-    @Bind(R.id.view_send_bottom)
-    View viewSendBottom;
+//    @Bind(R.id.view_send_bottom)
+//    View viewSendBottom;
     @Bind(R.id.ibt_send_config)
     ImageButton ibtSendConfig;
     @Bind(R.id.ibt_send)
@@ -149,7 +149,7 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
 
         if (!startAnimation){
             int actionbarSize = Utils.dpToPx(56);
-            viewSendBottom.setTranslationY(actionbarSize);
+            //viewSendBottom.setTranslationY(actionbarSize);
             ibtSendConfig.setTranslationY(actionbarSize);
             etSend.setTranslationY(actionbarSize);
             ibtSend.setTranslationY(actionbarSize);
@@ -189,7 +189,7 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
         super.onCreateOptionsMenu(menu, inflater);
         if (startAnimation) {
             startAnimation = false;
-            startAnimation();
+            //startAnimation();
         }
     }
 
@@ -202,7 +202,7 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
         getTvToolbarTitle().setTranslationY(-actionbarSize);
         getConfigMenuItem().getActionView().setTranslationY(-actionbarSize);
 
-        viewSendBottom.setTranslationY(actionbarSize);
+        //viewSendBottom.setTranslationY(actionbarSize);
         ibtSendConfig.setTranslationY(actionbarSize);
         etSend.setTranslationY(actionbarSize);
         ibtSend.setTranslationY(actionbarSize);
@@ -218,7 +218,7 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
                 });
 
 
-        AnimateUtils.translationY(viewSendBottom, 0, ANIM_DURATION_TOOLBAR, 300);
+        //AnimateUtils.translationY(viewSendBottom, 0, ANIM_DURATION_TOOLBAR, 300);
         AnimateUtils.translationY(ibtSendConfig, 0, ANIM_DURATION_TOOLBAR, 400);
         AnimateUtils.translationY(etSend, 0, ANIM_DURATION_TOOLBAR, 500);
         AnimateUtils.translationY(ibtSend, 0, ANIM_DURATION_TOOLBAR, 600);
@@ -236,7 +236,7 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
             return;
 
         viewStateAnimation();
-        AnimateUtils.translationY(viewSendBottom, 0, ANIM_DURATION_TOOLBAR, 300);
+        //AnimateUtils.translationY(viewSendBottom, 0, ANIM_DURATION_TOOLBAR, 300);
         AnimateUtils.translationY(ibtSendConfig, 0, ANIM_DURATION_TOOLBAR, 400);
         AnimateUtils.translationY(etSend, 0, ANIM_DURATION_TOOLBAR, 500);
         AnimateUtils.translationY(ibtSend, 0, ANIM_DURATION_TOOLBAR, 600);
@@ -277,12 +277,12 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
 
         if (!show) {
             ibtSendConfig.setSelected(true);
-            viewSendBottom.setTranslationY(Utils.dpToPx(140));
-            AnimateUtils.translationY(viewSendBottom, 0, 200, 0);
+            //viewSendBottom.setTranslationY(Utils.dpToPx(140));
+            //AnimateUtils.translationY(viewSendBottom, 0, 200, 0);
             configItemAdapter.notifyDataSetChanged();
         } else {
             ibtSendConfig.setSelected(false);
-            AnimateUtils.translationY(viewSendBottom, Utils.dpToPx(140), 200, 0);
+            //AnimateUtils.translationY(viewSendBottom, Utils.dpToPx(140), 200, 0);
         }
         show = !show;
     }
