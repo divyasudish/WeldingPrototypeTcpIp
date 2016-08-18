@@ -189,7 +189,7 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
         super.onCreateOptionsMenu(menu, inflater);
         if (startAnimation) {
             startAnimation = false;
-            //startAnimation();
+            startAnimation();
         }
     }
 

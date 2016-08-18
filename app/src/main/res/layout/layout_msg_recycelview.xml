@@ -10,7 +10,7 @@
         android:scrollbars="vertical"
         android:layout_below="@id/view_conn_state"
         android:paddingBottom="50dp"
-        android:alpha="0"/>
-        <!--android:background="@drawable/drawable_bg_data_listview"-->
+        android:alpha="0"
+        android:background="@drawable/back8" />
 
 </merge>

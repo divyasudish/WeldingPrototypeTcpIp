@@ -38,23 +38,23 @@ public class RevealBackgroundView extends View {
 
     public RevealBackgroundView(Context context) {
         super(context);
-        init();
+        //init();
     }
 
     public RevealBackgroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
+        //init();
     }
 
     public RevealBackgroundView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        //init();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public RevealBackgroundView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init();
+        //init();
     }
 
 
@@ -88,11 +88,11 @@ public class RevealBackgroundView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        if (state == STATE_FINISHED){
-            canvas.drawRect(0,0,getWidth(),getHeight(),fillPaint);
-        }else {
-            canvas.drawCircle(startLocationX,startLocationY,currentRadius,fillPaint);
-        }
+//        if (state == STATE_FINISHED){
+//            canvas.drawRect(0,0,getWidth(),getHeight(),fillPaint);
+//        }else {
+//            canvas.drawCircle(startLocationX,startLocationY,currentRadius,fillPaint);
+//        }
     }
 
     public void setCurrentRadius(int currentRadius) {

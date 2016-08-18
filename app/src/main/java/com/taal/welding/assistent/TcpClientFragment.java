@@ -476,8 +476,7 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
         }
     }
 
-
-    private void startTimer(long interval){
+    private void startTimer(long interval) {
 
         etSend.setEnabled(false);
         ibtSend.setEnabled(false);
@@ -494,8 +493,7 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
         showOrDismissConfigView();
     }
 
-
-    private void stopTimer(){
+    private void stopTimer() {
         etSend.setEnabled(true);
         ibtSend.setEnabled(true);
 
@@ -504,8 +502,6 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
             timer = null;
         }
     }
-
-
     @Override
     public boolean onBackPressed() {
 
