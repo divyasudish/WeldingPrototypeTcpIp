@@ -65,14 +65,14 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
 
 //    @Bind(R.id.view_send_bottom)
 //    View viewSendBottom;
-    @Bind(R.id.ibt_send_config)
-    ImageButton ibtSendConfig;
-    @Bind(R.id.ibt_send)
-    ImageButton ibtSend;
-    @Bind(R.id.et_send)
-    EditText etSend;
-    @Bind(R.id.rv_send_config)
-    RecyclerView rvSendConfig;
+//    @Bind(R.id.ibt_send_config)
+//    ImageButton ibtSendConfig;
+//    @Bind(R.id.ibt_send)
+//    ImageButton ibtSend;
+//    @Bind(R.id.et_send)
+//    EditText etSend;
+//    @Bind(R.id.rv_send_config)
+//    RecyclerView rvSendConfig;
 
     private boolean startAnimation;
 
@@ -112,10 +112,10 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
         }
 
         GridLayoutManager glm = new GridLayoutManager(getActivity(), 3);
-        rvSendConfig.setLayoutManager(glm);
-        rvSendConfig.setOverScrollMode(View.OVER_SCROLL_NEVER);
+//        rvSendConfig.setLayoutManager(glm);
+//        rvSendConfig.setOverScrollMode(View.OVER_SCROLL_NEVER);
         configItemAdapter = new ConfigItemAdapter(getActivity(), configItemList);
-        rvSendConfig.setAdapter(configItemAdapter);
+        //rvSendConfig.setAdapter(configItemAdapter);
         configItemAdapter.setOnItemClickListener(new ConfigItemAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -137,8 +137,8 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
 
         revealBackgroundView.setOnStateChangeListener(this);
 
-        ibtSendConfig.setOnClickListener(this);
-        ibtSend.setOnClickListener(this);
+//        ibtSendConfig.setOnClickListener(this);
+//        ibtSend.setOnClickListener(this);
         btnConnOption.setOnClickListener(this);
 
         if (savedInstanceState == null) {
@@ -150,9 +150,9 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
         if (!startAnimation){
             int actionbarSize = Utils.dpToPx(56);
             //viewSendBottom.setTranslationY(actionbarSize);
-            ibtSendConfig.setTranslationY(actionbarSize);
-            etSend.setTranslationY(actionbarSize);
-            ibtSend.setTranslationY(actionbarSize);
+//            ibtSendConfig.setTranslationY(actionbarSize);
+//            etSend.setTranslationY(actionbarSize);
+//            ibtSend.setTranslationY(actionbarSize);
         }
 
     }
@@ -203,9 +203,9 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
         getConfigMenuItem().getActionView().setTranslationY(-actionbarSize);
 
         //viewSendBottom.setTranslationY(actionbarSize);
-        ibtSendConfig.setTranslationY(actionbarSize);
-        etSend.setTranslationY(actionbarSize);
-        ibtSend.setTranslationY(actionbarSize);
+//        ibtSendConfig.setTranslationY(actionbarSize);
+//        etSend.setTranslationY(actionbarSize);
+//        ibtSend.setTranslationY(actionbarSize);
 
         AnimateUtils.translationY(getToolbar(), 0, ANIM_DURATION_TOOLBAR, 300);
         AnimateUtils.translationY(getTvToolbarTitle(), 0, ANIM_DURATION_TOOLBAR, 400);
@@ -219,9 +219,9 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
 
 
         //AnimateUtils.translationY(viewSendBottom, 0, ANIM_DURATION_TOOLBAR, 300);
-        AnimateUtils.translationY(ibtSendConfig, 0, ANIM_DURATION_TOOLBAR, 400);
-        AnimateUtils.translationY(etSend, 0, ANIM_DURATION_TOOLBAR, 500);
-        AnimateUtils.translationY(ibtSend, 0, ANIM_DURATION_TOOLBAR, 600);
+//        AnimateUtils.translationY(ibtSendConfig, 0, ANIM_DURATION_TOOLBAR, 400);
+//        AnimateUtils.translationY(etSend, 0, ANIM_DURATION_TOOLBAR, 500);
+//        AnimateUtils.translationY(ibtSend, 0, ANIM_DURATION_TOOLBAR, 600);
     }
 
 
@@ -237,9 +237,9 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
 
         viewStateAnimation();
         //AnimateUtils.translationY(viewSendBottom, 0, ANIM_DURATION_TOOLBAR, 300);
-        AnimateUtils.translationY(ibtSendConfig, 0, ANIM_DURATION_TOOLBAR, 400);
-        AnimateUtils.translationY(etSend, 0, ANIM_DURATION_TOOLBAR, 500);
-        AnimateUtils.translationY(ibtSend, 0, ANIM_DURATION_TOOLBAR, 600);
+//        AnimateUtils.translationY(ibtSendConfig, 0, ANIM_DURATION_TOOLBAR, 400);
+//        AnimateUtils.translationY(etSend, 0, ANIM_DURATION_TOOLBAR, 500);
+//        AnimateUtils.translationY(ibtSend, 0, ANIM_DURATION_TOOLBAR, 600);
     }
 
 
@@ -271,19 +271,20 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
 
     protected void showOrDismissConfigView() {
 
-        if (rvSendConfig.getVisibility() == View.GONE) {
-            rvSendConfig.setVisibility(View.VISIBLE);
-        }
+//        if (rvSendConfig.getVisibility() == View.GONE) {
+//            rvSendConfig.setVisibility(View.VISIBLE);
+//        }
 
         if (!show) {
-            ibtSendConfig.setSelected(true);
+            //ibtSendConfig.setSelected(true);
             //viewSendBottom.setTranslationY(Utils.dpToPx(140));
             //AnimateUtils.translationY(viewSendBottom, 0, 200, 0);
             configItemAdapter.notifyDataSetChanged();
-        } else {
-            ibtSendConfig.setSelected(false);
-            //AnimateUtils.translationY(viewSendBottom, Utils.dpToPx(140), 200, 0);
         }
+//        else {
+//            ibtSendConfig.setSelected(false);
+//            //AnimateUtils.translationY(viewSendBottom, Utils.dpToPx(140), 200, 0);
+//        }
         show = !show;
     }
 
@@ -307,10 +308,10 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
         super.onClick(v);
         if (!canTouched)
             return;
-        if (v == ibtSend) {
-            if (onButtonClickListener != null)
-                onButtonClickListener.onSendClick();
-        }
+//        if (v == ibtSend) {
+//            if (onButtonClickListener != null)
+//                onButtonClickListener.onSendClick();
+//        }
 
 
         if (v == btnConnOption) {
@@ -318,10 +319,10 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
                 onButtonClickListener.onConnOptionCLick();
         }
 
-        if (v == ibtSendConfig) {
-            showOrDismissConfigView();
-            Utils.hideInputMethodWindow(getActivity());
-        }
+//        if (v == ibtSendConfig) {
+//            showOrDismissConfigView();
+//            Utils.hideInputMethodWindow(getActivity());
+//        }
     }
 
 
@@ -353,9 +354,9 @@ public abstract class CommunicationBaseFragment extends BaseFragment implements
         return btnConnOption;
     }
 
-    public EditText getEtSend() {
-        return etSend;
-    }
+//    public EditText getEtSend() {
+//        return etSend;
+//    }
 
     public RecyclerView getRvMsg() {
         return rvMsg;

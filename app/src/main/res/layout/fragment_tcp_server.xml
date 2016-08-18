@@ -33,12 +33,12 @@
         layout="@layout/layout_msg_recycelview"/>
 
 
-    <include
-        android:id="@+id/view_send_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        layout="@layout/layout_bottom_send_and_config"/>
+    <!--<include-->
+        <!--android:id="@+id/view_send_bottom"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--layout="@layout/layout_bottom_send_and_config"/>-->
 
 
 

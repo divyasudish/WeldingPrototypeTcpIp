@@ -90,30 +90,30 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
                     case 1:
                         isHexDisplay = isSelected;
                         break;
-                    case 2:
-                        String textInput = etSend.getText().toString();
-                        isSendHex = isSelected;
-                        if(isSelected){
-                            if (textInput != null)
-                                try {
-                                    etSend.setText(StringUtils.bytesToHexString(textInput.getBytes("gb-2312")));
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-                        }else {
-                            if (textInput != null){
-                                textInput = textInput.replace(" ","");
-                                byte[] bytes = StringUtils.hexStringToBytes(textInput);
-                                try {
-                                    String normalText = bytes == null?"":new String(bytes,"gb-2312");
-                                    etSend.setText(normalText);
-                                } catch (UnsupportedEncodingException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        }
-                        break;
+//                    case 2:
+//                        String textInput = etSend.getText().toString();
+//                        isSendHex = isSelected;
+//                        if(isSelected){
+//                            if (textInput != null)
+//                                try {
+//                                    etSend.setText(StringUtils.bytesToHexString(textInput.getBytes("gb-2312")));
+//                                } catch (UnsupportedEncodingException e) {
+//                                    e.printStackTrace();
+//                                }
+//                        }else {
+//                            if (textInput != null){
+//                                textInput = textInput.replace(" ","");
+//                                byte[] bytes = StringUtils.hexStringToBytes(textInput);
+//                                try {
+//                                    String normalText = bytes == null?"":new String(bytes,"gb-2312");
+//                                    etSend.setText(normalText);
+//                                } catch (UnsupportedEncodingException e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                            }
+//                        }
+//                        break;
                     case 3:
                         if (isSelected)
                             showTimerDialog();
@@ -197,38 +197,38 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
             return;
         }
 
-        String sendStr = etSend.getText().toString();
-        if (TextUtils.isEmpty(sendStr)){
-            AnimateUtils.shake(etSend);
-            return;
-        }
-
-        if (!isSendHex){
-            try {
-                connect.send(sendStr.getBytes("gb-2312"));
-            }catch (Exception ex){
-                connect.send(sendStr.getBytes());
-            }
-
-        }
-        else {
-            sendStr = sendStr.replace(" ","");
-            if (!StringUtils.isRightHexStr(sendStr)){
-                AnimateUtils.shake(etSend);
-                return;
-            }
-            byte[] data = StringUtils.hexStringToBytes(sendStr);
-            if (data != null){
-                connect.send(data);
-                sendStr = StringUtils.bytesToHexString(data);
-            }else
-                return;
-        }
-
-        Message newMsg = new Message(Message.MESSAGE_TYPE.SEND,sendStr, localIp);
-        getMsgsList().add(newMsg);
-        getMsgAdapter().notifyLastItem();
-        rvMsg.smoothScrollToPosition(getMsgAdapter().getItemCount() - 1);
+//        String sendStr = etSend.getText().toString();
+//        if (TextUtils.isEmpty(sendStr)){
+//            AnimateUtils.shake(etSend);
+//            return;
+//        }
+//
+//        if (!isSendHex){
+//            try {
+//                connect.send(sendStr.getBytes("gb-2312"));
+//            }catch (Exception ex){
+//                connect.send(sendStr.getBytes());
+//            }
+//
+//        }
+//        else {
+//            sendStr = sendStr.replace(" ","");
+//            if (!StringUtils.isRightHexStr(sendStr)){
+//                AnimateUtils.shake(etSend);
+//                return;
+//            }
+//            byte[] data = StringUtils.hexStringToBytes(sendStr);
+//            if (data != null){
+//                connect.send(data);
+//                sendStr = StringUtils.bytesToHexString(data);
+//            }else
+//                return;
+//        }
+//
+//        Message newMsg = new Message(Message.MESSAGE_TYPE.SEND,sendStr, localIp);
+//        getMsgsList().add(newMsg);
+//        getMsgAdapter().notifyLastItem();
+//        rvMsg.smoothScrollToPosition(getMsgAdapter().getItemCount() - 1);
     }
 
     @Override
@@ -414,14 +414,14 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
             return;
         }
 
-        String sendStr = etSend.getText().toString();
-        if (TextUtils.isEmpty(sendStr)){
-            Utils.showToast(getActivity(), R.string.input_send_content);
-            setConfigItemUnSelected(3);
-            showOrDismissConfigView();
-            stopTimer();
-            return;
-        }
+//        String sendStr = etSend.getText().toString();
+//        if (TextUtils.isEmpty(sendStr)){
+//            Utils.showToast(getActivity(), R.string.input_send_content);
+//            setConfigItemUnSelected(3);
+//            showOrDismissConfigView();
+//            stopTimer();
+//            return;
+//        }
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_timer,null,false);
         final EditText etInputTime = (EditText)view.findViewById(R.id.et_input_time);
         Dialog dialog = new AlertDialog.Builder(getActivity())
@@ -478,8 +478,8 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
 
     private void startTimer(long interval) {
 
-        etSend.setEnabled(false);
-        ibtSend.setEnabled(false);
+//        etSend.setEnabled(false);
+//        ibtSend.setEnabled(false);
 
         timer = new Timer();
         TimerTask timerTask = new TimerTask() {
@@ -494,8 +494,8 @@ public class TcpClientFragment extends CommunicationBaseFragment implements Comm
     }
 
     private void stopTimer() {
-        etSend.setEnabled(true);
-        ibtSend.setEnabled(true);
+//        etSend.setEnabled(true);
+//        ibtSend.setEnabled(true);
 
         if (timer != null){
             timer.cancel();
