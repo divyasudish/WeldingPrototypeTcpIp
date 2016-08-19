@@ -464,11 +464,11 @@ public class UdpFragment extends CommunicationBaseFragment implements Communicat
     }
 
 
-    private void stopTimer(){
+    private void stopTimer() {
 //        etSend.setEnabled(true);
 //        ibtSend.setEnabled(true);
 
-        if (timer != null){
+        if (timer != null) {
             timer.cancel();
             timer = null;
         }
