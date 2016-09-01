@@ -650,12 +650,13 @@ public class MachineProgressNewActivity extends AppCompatActivity implements Con
                 Boolean flag_Loop = false;
                 for(iLoop = 0; iLoop < x.length; iLoop++) {
                     if ((x[iLoop].equals("46")) && (velFlag || posFlag)) {
+                        System.out.println(x[iLoop]);
                         try {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    velocityMov.setText("Clockwise");
-                                    posMove.setText("Anticlockwise");
+                                velocityMov.setText("Clockwise");
+                                posMove.setText("Anticlockwise");
                                 }
                             });
                         }
