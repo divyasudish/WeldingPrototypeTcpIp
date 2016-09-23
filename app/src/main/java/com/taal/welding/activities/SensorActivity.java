@@ -252,8 +252,29 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
         }
     }
     @OnClick(R.id.Gyro)
-    protected void gyro(){
-        startActivity(new Intent(getApplicationContext(), Motor_GairBoxActivity.class));
+    protected void gyro() {
+        Intent i = new Intent(getApplicationContext(), Motor_GairBoxActivity.class);
+        startActivityForResult(i, 123);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            if (resultCode == RESULT_OK && requestCode == 123) {
+                if (data.hasExtra("GearBox")) {
+                    gear.setText(data.getExtras().getString("GearBox"));
+                }
+                if (data.hasExtra("BandDia")) {
+                    band.setText(data.getExtras().getString("BandDia"));
+                }
+                if(data.hasExtra("GearWheel")) {
+                    wheel.setText(data.getExtras().getString("GearWheel"));
+                }
+            }
+        }
+        catch (Exception e) {
+
+        }
     }
 
     @Override
@@ -264,41 +285,41 @@ public class SensorActivity extends AppCompatActivity implements ConnectListener
     public void onResume() {
         super.onResume();
 
-        Thread t = new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
-                        Thread.sleep(1000);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    System.out.println("Inside resume thread");
-                                    mListGear = db.getAllGearBoxes();
-                                    if(!mListGear.isEmpty()) {
-                                        for(int i = 0; i < mListGear.size(); i++) {
-                                            if(mListGear.get(i).getDeviceNmae().equals(mDevice)) {
-                                                gear.setText(mListGear.get(i).getGbr());
-                                                band.setText(mListGear.get(i).getBandDia());
-                                                wheel.setText(mListGear.get(i).getGearwheelDia());
-                                            }
-                                        }
-                                    }
-                                }
-                                catch(Exception e) {
-
-                                }
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                }
-            }
-        };
-
-        t.start();
+//        Thread t = new Thread() {
+//
+//            @Override
+//            public void run() {
+//                try {
+//                    while (!isInterrupted()) {
+//                        Thread.sleep(1000);
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                try {
+//                                    System.out.println("Inside resume thread");
+//                                    mListGear = db.getAllGearBoxes();
+//                                    if(!mListGear.isEmpty()) {
+//                                        for(int i = 0; i < mListGear.size(); i++) {
+//                                            if(mListGear.get(i).getDeviceNmae().equals(mDevice)) {
+//                                                gear.setText(mListGear.get(i).getGbr());
+//                                                band.setText(mListGear.get(i).getBandDia());
+//                                                wheel.setText(mListGear.get(i).getGearwheelDia());
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                                catch(Exception e) {
+//
+//                                }
+//                            }
+//                        });
+//                    }
+//                } catch (InterruptedException e) {
+//                }
+//            }
+//        };
+//
+//        t.start();
     }
 
     @Override

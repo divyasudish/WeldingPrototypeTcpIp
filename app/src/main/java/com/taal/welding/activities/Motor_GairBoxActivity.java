@@ -11,6 +11,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -179,8 +180,25 @@ public class Motor_GairBoxActivity extends AppCompatActivity {
         bracketText.setEnabled(false);
         gearText.setEnabled(false);
         set.setEnabled(false);
-
         finish();
+    }
+
+    @Override
+    public void finish() {
+        try {
+
+            Intent data = new Intent();
+            data.putExtra("GearBox", gbrText.getText().toString().trim());
+            data.putExtra("BandDia", bracketText.getText().toString().trim());
+            data.putExtra("GearWheel", gearText.getText().toString());
+            // Activity finished ok, return the data
+            setResult(RESULT_OK, data);
+
+        }
+        catch (Exception e) {
+
+        }
+        super.finish();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
